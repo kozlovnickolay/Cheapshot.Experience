@@ -1,0 +1,177 @@
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Adygeysk', '[
+    {
+        "lat": 44.88337,
+        "lon": 39.19096
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Ekaterinburg', '[
+    {
+        "lat": 56.82991,
+        "lon": 60.58259
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇸🇪 Göteborg', '[
+    {
+        "lat": 57.66487,
+        "lon": 11.99804
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇹🇷 İstanbul', '[
+    {
+        "lat": 40.99923,
+        "lon": 28.79762
+    },
+    {
+        "lat": 41.03591,
+        "lon": 29.02629
+    },
+    {
+        "lat": 40.92601,
+        "lon": 29.20757
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Kaluga', '[
+    {
+        "lat": 54.50835,
+        "lon": 36.27353
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Petropavlovsk-Kamchatsky', '[
+    {
+        "lat": 53.01597,
+        "lon": 158.662
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Khabarovsk', '[
+    {
+        "lat": 48.48140,
+        "lon": 135.07693
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇺🇦 Kyiv', '[
+    {
+        "lat": 50.44566,
+        "lon": 30.53920
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇺🇦 Lviv', '[
+    {
+        "lat": 49.82520,
+        "lon": 24.03923
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇸🇪 Malmö', '[
+    {
+        "lat": 55.54479,
+        "lon": 13.05205
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇧🇾 Minsk', '[
+    {
+        "lat": 53.89490,
+        "lon": 27.57207
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Nizhny Novgorod', '[
+    {
+        "lat": 56.30218,
+        "lon": 44.01566
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Novosibirsk', '[
+    {
+        "lat": 55.02821,
+        "lon": 82.92345
+    }
+]');
+
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇺🇦 Odessa', '[
+    {
+        "lat": 46.47185,
+        "lon": 30.71633
+    }
+]');
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Sochi', '[
+    {
+        "lat": 43.58586,
+        "lon": 39.72836
+    },
+    {
+        "lat": 43.43447,
+        "lon": 39.92062
+    }
+]');
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇸🇪 Stockholm', '[
+    {
+        "lat": 59.31428,
+        "lon": 18.07857
+    }
+]');
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Tula', '[
+    {
+        "lat": 54.18818,
+        "lon": 37.61386
+    }
+]');
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Tver', '[
+    {
+        "lat": 56.85117,
+        "lon": 35.91432
+    }
+]');
+INSERT INTO public.city
+(id, "name", points)
+VALUES(uuid_generate_v4(), '🇷🇺 Voronezh', '[
+    {
+        "lat": 51.66314,
+        "lon": 39.18763
+    }
+]');
