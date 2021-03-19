@@ -6,41 +6,41 @@ using Cheapshot.Inspector.Services.Interfaces;
 
 namespace Cheapshot.Inspector.Services {
     public class WorkerContext : IWorkerContext {
-        private readonly IDbRepository m_dbRepository;
+        private readonly CitiesRepository m_cities;
+        private readonly UsersRepository m_users;
+        private readonly ExperienceRepository m_exps;
 
-        public WorkerContext(IDbRepository dbRepository) {
-            m_dbRepository = dbRepository;
+        public WorkerContext(CitiesRepository cities, UsersRepository users, ExperienceRepository exps) {
+            m_cities = cities;
+            m_users = users;
+            m_exps = exps;
         }
 
         public CityEntity[] GetAllCities() {
-            return m_dbRepository.GetAll<CityEntity>().ToArray();
+            return m_cities.GetAll().ToArray();
         }
 
         public Guid InsertOrUpdateUser(UserEntity userEntity) {
-
-
-            var user = m_dbRepository.Get<UserEntity>().FirstOrDefault(x => x.UserId == userEntity.UserId);
+            var user = m_users.GetById(userEntity.Id);
             if (user == null) {
-                var id = m_dbRepository.Add(userEntity);
-                m_dbRepository.SaveChanges();
+                var id = m_users.Add(userEntity);
+                m_users.SaveChanges();
                 return id;
             } else {
                 if (userEntity.Name != user.Name || userEntity.Level != user.Level || userEntity.UserPic != user.UserPic) {
                     user.Name = userEntity.Name;
                     user.Level = userEntity.Level;
                     user.UserPic = userEntity.UserPic;
-                    m_dbRepository.Update(user);
-                    m_dbRepository.SaveChanges();
+                    m_users.Update(user);
+                    m_users.SaveChanges();
                 }
                 return user.Id;
             }
-
-
         }
 
         public Guid InsertXpData(ExperienceEntity xp) {
-            var id = m_dbRepository.Add(xp);
-            m_dbRepository.SaveChanges();
+            var id = m_exps.Add(xp);
+            m_exps.SaveChanges();
             return id;
         }
     }

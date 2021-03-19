@@ -33,10 +33,11 @@ namespace Cheapshot.Experience {
             services.AddDbContext<DataContext>(options => {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<IDbRepository, DbRepository>();
+            services.AddScoped<CitiesRepository>();
+            services.AddScoped<UsersRepository>();
+            services.AddScoped<ExperienceRepository>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IWorkerContext, WorkerContext>();
-
             services.AddHostedService<Worker>();
         }
 

@@ -25,47 +25,47 @@ namespace Cheapshot.Inspector {
         }
 
         public void GetNewData(object state) {
-            using (var scope = m_scopeFactory.CreateScope()) {
-                var m_dc = scope.ServiceProvider.GetService<IWorkerContext>();
-                var cities = m_dc.GetAllCities();
+            //using (var scope = m_scopeFactory.CreateScope()) {
+            //    var m_dc = scope.ServiceProvider.GetService<IWorkerContext>();
+            //    var cities = m_dc.GetAllCities();
 
-                foreach (var city in cities) {
-                    m_logger.LogInformation($"Загрузка города: {city.Name}");
-                    var usersId = new List<long>();
-                    var i = 0;
-                    foreach (var point in city.Locations) {
-                        i++;
-                        m_logger.LogInformation($"{i}) загрузка точки: {point.lat}, {point.lon}");
-                        var url = ApiHelper.GetInspectUrl(point.lat, point.lon);
-                        var inspect = m_inspectService.GetInspect(url);
-                        if (inspect != null) {
-                            m_logger.LogInformation($"{i}) найдено {inspect.Users.Values.Count} игроков");
+            //    foreach (var city in cities) {
+            //        m_logger.LogInformation($"Загрузка города: {city.Name}");
+            //        var usersId = new List<long>();
+            //        var i = 0;
+            //        foreach (var point in city.Locations) {
+            //            i++;
+            //            m_logger.LogInformation($"{i}) загрузка точки: {point.lat}, {point.lon}");
+            //            var url = ApiHelper.GetInspectUrl(point.lat, point.lon);
+            //            var inspect = m_inspectService.GetInspect(url);
+            //            if (inspect != null) {
+            //                m_logger.LogInformation($"{i}) найдено {inspect.Users.Values.Count} игроков");
 
-                            foreach (var user in inspect.Users.Values) {
-                                if (user.Role == "user" && !usersId.Contains(user.UserId)) {
-                                    var userEntity = new UserEntity {
-                                        UserId = user.UserId,
-                                        Level = user.Level,
-                                        Name = user.Name,
-                                        UserPic = user.Userpic
-                                    };
-                                    usersId.Add(user.UserId);
+            //                foreach (var user in inspect.Users.Values) {
+            //                    if (user.Role == "user" && !usersId.Contains(user.UserId)) {
+            //                        var userEntity = new UserEntity {
+            //                            UserId = user.UserId,
+            //                            Level = user.Level,
+            //                            Name = user.Name,
+            //                            UserPic = user.Userpic
+            //                        };
+            //                        usersId.Add(user.UserId);
 
-                                    var userId = m_dc.InsertOrUpdateUser(userEntity);
+            //                        var userId = m_dc.InsertOrUpdateUser(userEntity);
 
-                                    var xpEntity = new ExperienceEntity {
-                                        CityId = city.Id,
-                                        Date = DateTime.Now.Date,
-                                        UserId = userId,
-                                        Xp = user.Xp
-                                    };
-                                    m_dc.InsertXpData(xpEntity);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                        var xpEntity = new ExperienceEntity {
+            //                            CityId = city.Id,
+            //                            Date = DateTime.Now.Date,
+            //                            UserId = userId,
+            //                            Xp = user.Xp
+            //                        };
+            //                        m_dc.InsertXpData(xpEntity);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         public Task StartAsync(CancellationToken cancellationToken) {

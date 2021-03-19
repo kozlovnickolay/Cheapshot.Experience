@@ -22,8 +22,8 @@ namespace Cheapshot.Experience.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<City> Get() {
-            return m_service.GetAllCities();
+        public object Get() {
+            return m_service.GetMaxExp();// GetAllCities();
         }
     }
 }
