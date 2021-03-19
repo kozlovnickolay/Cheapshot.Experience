@@ -16,6 +16,10 @@ namespace Cheapshot.Inspector.Services {
             m_exps = exps;
         }
 
+        public IQueryable<UserEntity> GetAllUsers() {
+            return m_users.GetAll();
+        }
+
         public CityEntity[] GetAllCities() {
             return m_cities.GetAll().ToArray();
         }
@@ -42,6 +46,21 @@ namespace Cheapshot.Inspector.Services {
             var id = m_exps.Add(xp);
             m_exps.SaveChanges();
             return id;
+        }
+
+        public void InsertRangeUsers(UserEntity[] users) {
+            m_users.AddRange(users);
+            m_users.SaveChanges();
+        }
+
+        public void InsertRangeExperience(ExperienceEntity[] exps) {
+            m_exps.AddRange(exps);
+            m_exps.SaveChanges();
+        }
+
+        public void UpdateRangeUsers(UserEntity[] users) {
+            m_users.UpdateRange(users);
+            m_users.SaveChanges();
         }
     }
 }

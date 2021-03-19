@@ -1,11 +1,13 @@
 ﻿using Cheapshot.Exprience.Data.Model;
 using Cheapshot.Inspector.Api;
+using Cheapshot.Inspector.Model;
 using Cheapshot.Inspector.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,58 +17,32 @@ namespace Cheapshot.Inspector {
         private readonly ILogger<Worker> m_logger;
         private readonly IServiceScopeFactory m_scopeFactory;
 
+        private List<InspectCollection> InspectCollection { get; set; }
+
+        private List<UserEntity> Users { get; set; }
 
         private Timer m_timer;
 
         public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory) {
             m_scopeFactory = scopeFactory;
             m_logger = logger;
-            m_inspectService = new InspectService();
+            InspectCollection = new List<InspectCollection>();
         }
 
         public void GetNewData(object state) {
-            //using (var scope = m_scopeFactory.CreateScope()) {
-            //    var m_dc = scope.ServiceProvider.GetService<IWorkerContext>();
-            //    var cities = m_dc.GetAllCities();
+            using (var scope = m_scopeFactory.CreateScope()) {
+                var dc = scope.ServiceProvider.GetService<IWorkerContext>();
+                var cities = dc.GetAllCities();
 
-            //    foreach (var city in cities) {
-            //        m_logger.LogInformation($"Загрузка города: {city.Name}");
-            //        var usersId = new List<long>();
-            //        var i = 0;
-            //        foreach (var point in city.Locations) {
-            //            i++;
-            //            m_logger.LogInformation($"{i}) загрузка точки: {point.lat}, {point.lon}");
-            //            var url = ApiHelper.GetInspectUrl(point.lat, point.lon);
-            //            var inspect = m_inspectService.GetInspect(url);
-            //            if (inspect != null) {
-            //                m_logger.LogInformation($"{i}) найдено {inspect.Users.Values.Count} игроков");
-
-            //                foreach (var user in inspect.Users.Values) {
-            //                    if (user.Role == "user" && !usersId.Contains(user.UserId)) {
-            //                        var userEntity = new UserEntity {
-            //                            UserId = user.UserId,
-            //                            Level = user.Level,
-            //                            Name = user.Name,
-            //                            UserPic = user.Userpic
-            //                        };
-            //                        usersId.Add(user.UserId);
-
-            //                        var userId = m_dc.InsertOrUpdateUser(userEntity);
-
-            //                        var xpEntity = new ExperienceEntity {
-            //                            CityId = city.Id,
-            //                            Date = DateTime.Now.Date,
-            //                            UserId = userId,
-            //                            Xp = user.Xp
-            //                        };
-            //                        m_dc.InsertXpData(xpEntity);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+                foreach (var city in cities) {
+                    DownloadUsersFromInspectByCity(city);
+                }
+                UpdateUsers(dc);
+                InsertExperience(dc);
+                Clear();
+            }
         }
+
 
         public Task StartAsync(CancellationToken cancellationToken) {
             m_logger.LogInformation("Timed Background Service is starting.");
@@ -86,6 +62,93 @@ namespace Cheapshot.Inspector {
 
         public void Dispose() {
             m_timer?.Dispose();
+        }
+
+        private void DownloadUsersFromInspectByCity(CityEntity city) {
+            using (var inspectService = new InspectService()) {
+                var cityCollection = new InspectCollection {
+                    Users = new List<User>(),
+                    CityId = city.Id
+                };
+                var userIds = new List<long>();
+
+                foreach (var location in city.Locations) {
+                    var url = ApiHelper.GetInspectUrl(location.lat, location.lon);
+                    var users = m_inspectService.GetUsers(url);
+                    if (users != null)
+                        foreach (var user in users) {
+                            if (user.Role == "user" && !userIds.Contains(user.UserId)) {
+                                cityCollection.Users.Add(user);
+                                userIds.Add(user.UserId);
+                            }
+                        }
+                }
+                InspectCollection.Add(cityCollection);
+                m_logger.LogInformation($"Найдено: {cityCollection.Users.Count} игроков в {city.Name}");
+
+            }
+
+        }
+
+        private void UpdateUsers(IWorkerContext dc) {
+            var existingUsers = dc.GetAllUsers();
+
+            var newUsers = new List<UserEntity>();
+            var updateUsers = new List<UserEntity>();
+
+            foreach (var collection in InspectCollection) {
+                foreach (var user in collection.Users) {
+                    var oldUser = existingUsers.FirstOrDefault(x => x.UserId == user.UserId);
+                    if (oldUser != null) {
+                        oldUser.Name = user.Name;
+                        oldUser.UserPic = user.Userpic;
+                        oldUser.Level = user.Level;
+                        updateUsers.Add(oldUser);
+                    } else {
+                        newUsers.Add(new UserEntity {
+                            Level = user.Level,
+                            Name = user.Name,
+                            UserId = user.UserId,
+                            UserPic = user.Userpic
+                        });
+                    }
+                }
+            }
+
+            dc.InsertRangeUsers(newUsers.ToArray());
+            m_logger.LogInformation($"Добавлено {newUsers.Count} новых игроков");
+
+            dc.UpdateRangeUsers(updateUsers.ToArray());
+            m_logger.LogInformation($"Обновлено {updateUsers.Count} игроков");
+
+
+            Users = dc.GetAllUsers().ToList();
+        }
+
+        private void InsertExperience(IWorkerContext dc) {
+            var updateExperience = new List<ExperienceEntity>();
+
+            foreach (var collection in InspectCollection) {
+                foreach (var user in collection.Users) {
+                    updateExperience.Add(new ExperienceEntity {
+                        CityId = collection.CityId,
+                        Date = DateTime.Now.Date,
+                        UserId = Users.First(x => x.UserId == user.UserId).Id,
+                        Xp = user.Xp
+                    });
+                }
+            }
+
+            dc.InsertRangeExperience(updateExperience.ToArray());
+            m_logger.LogInformation($"Добавлено {updateExperience.Count} новых записей опыта");
+
+        }
+
+        private void Clear() {
+            InspectCollection.Clear();
+            Users.Clear();
+            m_logger.LogInformation($"Словари очищены!");
+
         }
     }
 }
