@@ -6,10 +6,7 @@ using System.Linq;
 using System.Net;
 
 namespace Cheapshot.Inspector.Api {
-    public class InspectService : IDisposable {
-        public void Dispose() {
-            this.Dispose();
-        }
+    public class InspectService{
 
         public Inspect GetInspect(string url) {
             var request = (HttpWebRequest)WebRequest.Create(url);
@@ -37,9 +34,8 @@ namespace Cheapshot.Inspector.Api {
                 var resStream = response.GetResponseStream();
                 return DeserializeFromStream(resStream).Users.Values.ToArray();
 
-            } catch (WebException e) {
-                var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                return null;
+            } catch {
+                return new User[0];
             }
 
         }

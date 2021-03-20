@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Cheapshot.Exprience.Data {
@@ -15,20 +16,6 @@ namespace Cheapshot.Exprience.Data {
         public DataContext(DbContextOptions<DataContext> options) : base(options) {
         }
 
-        public int SaveChangesAsync() {
-            return base.SaveChanges();
-        }
-
-        public DbSet<T> DbSet<T>() where T : class {
-            return Set<T>();
-        }
-
-        public IQueryable<T> Query<T>() where T : class {
-            return Set<T>();
-        }
-
-        internal void UpdateRange<T>(IEnumerable<T> entities) where T : class, IEntity {
-            throw new NotImplementedException();
-        }
     }
+
 }

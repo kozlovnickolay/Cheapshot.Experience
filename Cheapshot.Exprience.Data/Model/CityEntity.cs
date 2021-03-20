@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Cheapshot.Exprience.Data.Model {
     [Table("city")]
@@ -10,6 +11,6 @@ namespace Cheapshot.Exprience.Data.Model {
         public string Points { get; set; }
         [NotMapped]
         public Location[] Locations => JsonSerializer.Deserialize<Location[]>(Points);
-
+        public List<ExperienceEntity> ExperienceEntities { get; set; }
     }
 }

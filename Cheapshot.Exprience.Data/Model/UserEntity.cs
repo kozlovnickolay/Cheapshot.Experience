@@ -14,5 +14,7 @@ namespace Cheapshot.Exprience.Data.Model {
         public string UserPic { get; set; }
         [Column("level")]
         public short Level { get; set; }
+
+        public List<ExperienceEntity> ExperienceEntities { get; set; }
     }
 }

@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Cheapshot.Inspector {
     public class Worker : IHostedService, IDisposable {
-        private readonly InspectService m_inspectService;
         private readonly ILogger<Worker> m_logger;
         private readonly IServiceScopeFactory m_scopeFactory;
+        private readonly InspectService m_inspectService;
 
         private List<InspectCollection> InspectCollection { get; set; }
 
@@ -26,21 +26,23 @@ namespace Cheapshot.Inspector {
         public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory) {
             m_scopeFactory = scopeFactory;
             m_logger = logger;
+            m_inspectService = new InspectService();
             InspectCollection = new List<InspectCollection>();
+
         }
 
         public void GetNewData(object state) {
-            using (var scope = m_scopeFactory.CreateScope()) {
-                var dc = scope.ServiceProvider.GetService<IWorkerContext>();
-                var cities = dc.GetAllCities();
+            //using (var scope = m_scopeFactory.CreateScope()) {
+            //    var dc = scope.ServiceProvider.GetService<IWorkerContext>();
+            //    var cities = dc.GetAllCities();
 
-                foreach (var city in cities) {
-                    DownloadUsersFromInspectByCity(city);
-                }
-                UpdateUsers(dc);
-                InsertExperience(dc);
-                Clear();
-            }
+            //    foreach (var city in cities) {
+            //        DownloadUsersFromInspectByCity(city);
+            //    }
+            //    UpdateUsers(dc);
+            //    InsertExperience(dc);
+            //    Clear();
+            //}
         }
 
 
@@ -65,7 +67,6 @@ namespace Cheapshot.Inspector {
         }
 
         private void DownloadUsersFromInspectByCity(CityEntity city) {
-            using (var inspectService = new InspectService()) {
                 var cityCollection = new InspectCollection {
                     Users = new List<User>(),
                     CityId = city.Id
@@ -75,7 +76,7 @@ namespace Cheapshot.Inspector {
                 foreach (var location in city.Locations) {
                     var url = ApiHelper.GetInspectUrl(location.lat, location.lon);
                     var users = m_inspectService.GetUsers(url);
-                    if (users != null)
+                    if (users.Length > 0)
                         foreach (var user in users) {
                             if (user.Role == "user" && !userIds.Contains(user.UserId)) {
                                 cityCollection.Users.Add(user);
@@ -86,7 +87,7 @@ namespace Cheapshot.Inspector {
                 InspectCollection.Add(cityCollection);
                 m_logger.LogInformation($"Найдено: {cityCollection.Users.Count} игроков в {city.Name}");
 
-            }
+            
 
         }
 
