@@ -40,55 +40,71 @@ namespace Cheapshot.Experience.Services {
             return new City { Id = c.Id, Name = c.Name };
         }
 
-
-
+        ResultEntry mapFromSearch(SearchEntry s) {
+            return new ResultEntry {
+                level = s.level,
+                name = s.name,
+                pic = s.pic,
+                xp = s.xp
+            };
+        }
         public object GetMaxExp() {
-            //var maxExp = m_exp.GetAll().Join(m_cities.GetAll(),
-            //    e => e.CityId,
-            //    c => c.Id,
-            //    (e, c) => new {
-            //        c,
-            //        e
-            //    }).Join(m_users.GetAll(),
-            //    ec => ec.e.UserId,
-            //    u => u.Id,
-            //    (ec, u) => new {
-            //        u.UserPic,
-            //        u.Name,
-            //        u.Level,
-            //        ec.e.Xp,
-            //        city = ec.c.Name
-            //    }).Distinct().ToArray();
+            var maxDate = m_exp.GetAll().Max(x => x.Date);
+            var result = m_exp.GetAll()
+                .Include(x => x.City)
+                .Include(x => x.User)
+                .Where(d => d.Date == maxDate)
+                .Select(x => new SearchEntry {
+                    pic = x.User.UserPic,
+                    name = x.User.Name,
+                    id = x.UserId,
+                    level = x.User.Level,
+                    xp = x.Xp,
+                    city = x.City.Name
+                })
+                .ToList();
 
-            //var maxExp = m_exp.GetAll()
-            //    .Include(x => x.User)
-            //    .Include(x => x.City)
-            //      .Join(m_exp.GetAll()
-            //        .Where(x => x.Date == new DateTime(2021, 3, 19))
-            //        .GroupBy(g => g.UserId, g.CityId)),
-            //        d
+            var grouped = result
+                .GroupBy(x => new { x.id, x.city })
+                .Select(x => new {
+                    x.Key.id,
+                    x.Key.city,
+                    entry = mapFromSearch(x.OrderByDescending(x => x.xp).First())
+                })
+                .OrderBy(x => x.city)
+                .GroupBy(x => x.id)
+                .Select(x => addCitiesToResultEntry(
+                    x.Select(y => y.entry).First(),
+                    string.Join(", ", x.Select(y => y.city).OrderBy(o => o))
+                    ))
+                .OrderByDescending(x => x.xp)
+                .Take(1000);
+            return grouped;
 
-            //    .Where(x => x.Date == new DateTime(2021, 3, 19) && x.Xp == m_exp.GetAll().Max(y => y.Xp))
-            //    .Select(x => new {
-            //        x.User.UserPic,
-            //        x.User.Name,
-            //        x.User.Level,
-            //        x.Xp,
-            //        City = x.City.Name
-            //    })
-            //    .OrderByDescending(x => x.Xp)
-            //    .AsEnumerable();
+        }
 
-            //m_exp.FromSqlRaw();
+        private class SearchEntry {
+            public string pic { get; set; }
+            public string name { get; set; }
 
-            ////var profile = m_exp.GetAll().Where(p => p.Xp == m_exp.GetAll().Max(r => r.Xp)).OrderByDescending(x => x.Xp);
+            public Guid id { get; set; }
+            public int level { get; set; }
 
+            public long xp { get; set; }
+            public string city { get; set; }
+        }
 
-            ////.Where(x => x.Date == new DateTime(2021, 3, 19) & x.Xp == m_exp.GetAll().Max(y => y.Xp))
-            ////.OrderByDescending(x => x.Xp)
-            ////.AsEnumerable();
-            return null;
+        public class ResultEntry {
+            public string pic { get; set; }
+            public string name { get; set; }
+            public int level { get; set; }
+            public long xp { get; set; }
+            public string cities { get; set; }
+        }
 
+        ResultEntry addCitiesToResultEntry(ResultEntry e, string c) {
+            e.cities = c;
+            return e;
         }
     }
 }
