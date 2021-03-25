@@ -231,3 +231,5 @@ _Pvt_Extensions
 .fake/
 obj
 bin
+Cheapshot.Inspector/Api/Resource.resx
+Cheapshot.Inspector/Api/Resource.Designer.cs

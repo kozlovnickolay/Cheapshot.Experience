@@ -32,24 +32,24 @@ namespace Cheapshot.Inspector {
         }
 
         public void GetNewData(object state) {
-            //using (var scope = m_scopeFactory.CreateScope()) {
-            //    var dc = scope.ServiceProvider.GetService<IWorkerContext>();
-            //    var cities = dc.GetAllCities();
+            using (var scope = m_scopeFactory.CreateScope()) {
+                var dc = scope.ServiceProvider.GetService<IWorkerContext>();
+                var cities = dc.GetAllCities();
 
-            //    foreach (var city in cities) {
-            //        DownloadUsersFromInspectByCity(city);
-            //    }
-            //    UpdateUsers(dc);
-            //    InsertExperience(dc);
-            //    Clear();
-            //}
+                foreach (var city in cities) {
+                    DownloadUsersFromInspectByCity(city);
+                }
+                UpdateUsers(dc);
+                InsertExperience(dc);
+                Clear();
+            }
         }
 
 
         public Task StartAsync(CancellationToken cancellationToken) {
             m_logger.LogInformation("Timed Background Service is starting.");
 
-            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(3600));
+            //m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(3600));
 
             return Task.CompletedTask;
         }

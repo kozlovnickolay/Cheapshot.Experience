@@ -23,7 +23,7 @@ namespace Cheapshot.Experience.Controllers {
 
         [HttpGet]
         public object Get() {
-            return m_service.GetMaxExp();// GetAllCities();
+            return m_service.GetAllCities();
         }
     }
 }

@@ -37,6 +37,7 @@ namespace Cheapshot.Experience {
             services.AddScoped<UsersRepository>();
             services.AddScoped<ExperienceRepository>();
             services.AddTransient<ICityService, CityService>();
+            services.AddTransient<ITopService, TopService>();
             services.AddTransient<IWorkerContext, WorkerContext>();
             services.AddHostedService<Worker>();
         }
