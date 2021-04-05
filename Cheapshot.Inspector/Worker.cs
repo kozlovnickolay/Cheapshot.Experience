@@ -19,8 +19,6 @@ namespace Cheapshot.Inspector {
 
         private List<InspectCollection> InspectCollection { get; set; }
 
-        private List<UserEntity> Users { get; set; }
-
         private Timer m_timer;
 
         public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory) {
@@ -49,7 +47,7 @@ namespace Cheapshot.Inspector {
         public Task StartAsync(CancellationToken cancellationToken) {
             m_logger.LogInformation("Timed Background Service is starting.");
 
-            //m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(3600));
+            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(3600));
 
             return Task.CompletedTask;
         }
@@ -67,66 +65,72 @@ namespace Cheapshot.Inspector {
         }
 
         private void DownloadUsersFromInspectByCity(CityEntity city) {
-                var cityCollection = new InspectCollection {
-                    Users = new List<User>(),
-                    CityId = city.Id
-                };
-                var userIds = new List<long>();
+            var cityCollection = new InspectCollection {
+                Users = new List<User>(),
+                CityId = city.Id
+            };
+            var userIds = new List<long>();
 
-                foreach (var location in city.Locations) {
-                    var url = ApiHelper.GetInspectUrl(location.lat, location.lon);
-                    var users = m_inspectService.GetUsers(url);
-                    if (users.Length > 0)
-                        foreach (var user in users) {
-                            if (user.Role == "user" && !userIds.Contains(user.UserId)) {
-                                cityCollection.Users.Add(user);
-                                userIds.Add(user.UserId);
-                            }
+            foreach (var location in city.Locations) {
+                var url = ApiHelper.GetInspectUrl(location.lat, location.lon);
+                var users = m_inspectService.GetUsers(url);
+                if (users.Length > 0)
+                    foreach (var user in users) {
+                        if (user.Role == "user" && !userIds.Contains(user.UserId)) {
+                            cityCollection.Users.Add(user);
+                            userIds.Add(user.UserId);
                         }
-                }
-                InspectCollection.Add(cityCollection);
-                m_logger.LogInformation($"Найдено: {cityCollection.Users.Count} игроков в {city.Name}");
+                    }
+            }
+            InspectCollection.Add(cityCollection);
+            m_logger.LogInformation($"Найдено: {cityCollection.Users.Count} игроков в {city.Name}");
 
-            
+
 
         }
 
         private void UpdateUsers(IWorkerContext dc) {
             var existingUsers = dc.GetAllUsers();
 
-            var newUsers = new List<UserEntity>();
-            var updateUsers = new List<UserEntity>();
+            //var newUsers = new List<UserEntity>();
+            var insertOrUpdateUsers = new List<UserEntity>();
+            var newUsersCount = 0;
+            var updateUsersCount = 0;
 
             foreach (var collection in InspectCollection) {
                 foreach (var user in collection.Users) {
-                    var oldUser = existingUsers.FirstOrDefault(x => x.UserId == user.UserId);
-                    if (oldUser != null) {
+                    var oldUser = existingUsers.SingleOrDefault(x => x.UserId == user.UserId);
+                    if (oldUser != null && insertOrUpdateUsers.SingleOrDefault(x => x.UserId == user.UserId) == null) {
                         oldUser.Name = user.Name;
                         oldUser.UserPic = user.Userpic;
                         oldUser.Level = user.Level;
-                        updateUsers.Add(oldUser);
+                        insertOrUpdateUsers.Add(oldUser);
+                        updateUsersCount++;
                     } else {
-                        newUsers.Add(new UserEntity {
-                            Level = user.Level,
-                            Name = user.Name,
-                            UserId = user.UserId,
-                            UserPic = user.Userpic
-                        });
+                        if (insertOrUpdateUsers.SingleOrDefault(x => x.UserId == user.UserId) == null) {
+                            insertOrUpdateUsers.Add(new UserEntity {
+                                Level = user.Level,
+                                Name = user.Name,
+                                UserId = user.UserId,
+                                UserPic = user.Userpic
+                            });
+                            newUsersCount++;
+                        }
+
                     }
                 }
             }
 
-            dc.InsertRangeUsers(newUsers.ToArray());
-            m_logger.LogInformation($"Добавлено {newUsers.Count} новых игроков");
+            //dc.InsertRangeUsers(newUsers.ToArray());
+            //m_logger.LogInformation($"Добавлено {newUsers.Count} новых игроков");
 
-            dc.UpdateRangeUsers(updateUsers.ToArray());
-            m_logger.LogInformation($"Обновлено {updateUsers.Count} игроков");
-
-
-            Users = dc.GetAllUsers().ToList();
+            dc.UpdateRangeUsers(insertOrUpdateUsers.ToArray());
+            m_logger.LogInformation($"Добавлено {newUsersCount} новых игроков");
+            m_logger.LogInformation($"Обновлено {updateUsersCount} игроков");
         }
 
         private void InsertExperience(IWorkerContext dc) {
+            var users = dc.GetAllUsers().ToList();
             var updateExperience = new List<ExperienceEntity>();
 
             foreach (var collection in InspectCollection) {
@@ -134,7 +138,7 @@ namespace Cheapshot.Inspector {
                     updateExperience.Add(new ExperienceEntity {
                         CityId = collection.CityId,
                         Date = DateTime.Now.Date,
-                        UserId = Users.First(x => x.UserId == user.UserId).Id,
+                        UserId = users.Single(x => x.UserId == user.UserId).Id,
                         Xp = user.Xp
                     });
                 }
@@ -147,9 +151,7 @@ namespace Cheapshot.Inspector {
 
         private void Clear() {
             InspectCollection.Clear();
-            Users.Clear();
             m_logger.LogInformation($"Словари очищены!");
-
         }
     }
 }
