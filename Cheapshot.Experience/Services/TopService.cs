@@ -18,7 +18,8 @@ namespace Cheapshot.Experience.Services {
                 Level = s.Level,
                 Name = s.Name,
                 Pic = s.Pic,
-                Xp = s.Xp
+                Xp = s.Xp,
+                UserId = s.Id
             };
         }
         public IEnumerable<Top> GetTopPlayersByCityId(Guid cityId) {
@@ -100,16 +101,18 @@ namespace Cheapshot.Experience.Services {
         }
 
         IEnumerable<Top> GetDifferenceFromTops(IQueryable<ExperienceEntity> end, IQueryable<ExperienceEntity> start) {
-            var endResults = GetTopFromSearch(end);
-            var startRsults = GetTopFromSearch(start);
+            var endResults = GetTopFromSearch(end).ToArray();
+            var startResults = GetTopFromSearch(start).ToArray();
             var diff = new List<Top>();
 
             foreach (var endResult in endResults) {
-                var startXp = startRsults.FirstOrDefault(x => x.Name == endResult.Name && x.Level == endResult.Level).Xp;
-                if (startXp != endResult.Xp) {
-                    endResult.Xp = endResult.Xp - startXp;
+                var startEntry = startResults.FirstOrDefault(x => x.UserId == endResult.UserId);
+
+                if (startEntry != null && startEntry.Xp != endResult.Xp) {
+                    endResult.Xp = endResult.Xp - startEntry.Xp;
                     diff.Add(endResult);
                 }
+
             }
             return diff.OrderByDescending(x => x.Xp);
 

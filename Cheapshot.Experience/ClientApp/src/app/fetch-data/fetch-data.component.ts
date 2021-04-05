@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-fetch-data',
@@ -9,7 +9,14 @@ export class FetchDataComponent {
   public players: Player[];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Player[]>(baseUrl + 'top').subscribe(result => {
+
+    let params = new HttpParams();
+
+      //.set("cityId", "b415dfc6-c25b-45f9-83b0-6822a887ed91"); //Create new HttpParams
+
+    http.get<Player[]>(baseUrl + 'top', {
+      params
+    }).subscribe(result => {
       this.players = result;
     }, error => console.error(error));
   }
