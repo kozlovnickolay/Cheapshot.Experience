@@ -25,8 +25,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\custom-pipes\ThousandSuffixesPipe.ts" />
+    <None Remove="ClientApp\src\app\fonts\file.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Cheapshot.Exprience.Data\Cheapshot.Exprience.Data.csproj" />
     <ProjectReference Include="..\Cheapshot.Inspector\Cheapshot.Inspector.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\custom-pipes\ThousandSuffixesPipe.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\fonts\file.ts" />
   </ItemGroup>
 
   <ItemGroup>

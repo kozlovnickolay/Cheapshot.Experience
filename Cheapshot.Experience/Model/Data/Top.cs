@@ -7,7 +7,6 @@ namespace Cheapshot.Experience.Model.Data {
         public int Level { get; set; }
         public long Xp { get; set; }
         public string Cities { get; set; }
-
         public Guid UserId { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="players">
   <thead>
     <tr>
-      <th>Pic</th>
+      <th>#</th>
       <th>Name</th>
       <th>Level</th>
       <th>Xp</th>
@@ -13,11 +13,11 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let top of players">
-      <td>{{ top.pic }}</td>
-      <td>{{ top.name }}</td>
+    <tr *ngFor="let top of players; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td><span [class]="font.csemoji(top.pic, 32)">top.pic</span> {{ top.name }}</td>
       <td>{{ top.level }}</td>
-      <td>{{ top.xp }}</td>
+      <td>{{ top.xp | thousandSuff : 2 }}</td>
       <td>{{ top.cities }}</td>
     </tr>
   </tbody>
