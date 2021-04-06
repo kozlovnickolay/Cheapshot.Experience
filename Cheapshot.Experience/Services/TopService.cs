@@ -31,7 +31,7 @@ namespace Cheapshot.Experience.Services {
             else
                 top = m_exp.GetTopExperience(maxDate);
 
-            return GetTopFromSearch(top);
+            return GetTopFromSearch(top).Take(1000);
         }
 
 
@@ -60,8 +60,8 @@ namespace Cheapshot.Experience.Services {
                     x.Select(y => y.entry).First(),
                     string.Join(", ", x.Select(y => y.City).OrderBy(o => o))
                     ))
-                .OrderByDescending(x => x.Xp)
-                .Take(1000);
+                .OrderByDescending(x => x.Xp);
+                //.Take(1000);
             return grouped;
         }
 

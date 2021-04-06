@@ -18,8 +18,10 @@ namespace Cheapshot.Experience.Controllers {
         }
 
         [HttpGet]
-        public object Get(Guid cityId, DateTime startDate, DateTime dateTime) {
-            return m_service.GetTopPlayersByCityId(cityId);
+        public object Get(Guid cityId, DateTime startDate, DateTime endDate) {
+            return m_service.GetRangeTopPlayersByCityId(cityId, startDate, endDate);
+
+            //return m_service.GetTopPlayersByCityId(cityId);
         }
     }
 }

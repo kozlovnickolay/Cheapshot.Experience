@@ -12,7 +12,10 @@ export class LeaderboardComponent {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
 
-    let params = new HttpParams();
+    let params = new HttpParams()
+      //.set("cityId", "b415dfc6-c25b-45f9-83b0-6822a887ed91")
+      .set("startDate", "2021-04-05")
+      .set("endDate", "2021-04-06");
 
       //.set("cityId", "b415dfc6-c25b-45f9-83b0-6822a887ed91"); //Create new HttpParams
 
