@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
+import { MatSelect } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
     HomeComponent,
     CounterComponent,
     LeaderboardComponent,
-    ThousandSuffixesPipe
+    ThousandSuffixesPipe,
+    MatSelect
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
