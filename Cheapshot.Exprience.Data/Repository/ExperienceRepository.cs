@@ -15,12 +15,11 @@ namespace Cheapshot.Exprience.Data.Repository {
                 .Where(d => d.Date == date);
         }
 
-        public IQueryable<ExperienceEntity> GetTopExperience(DateTime date,Guid cityId) {
+        public IQueryable<ExperienceEntity> GetTopExperience(DateTime date, Guid cityId) {
             return GetAll()
                 .Include(x => x.City)
                 .Include(x => x.User)
                 .Where(d => d.Date == date && d.CityId == cityId);
         }
-
     }
 }

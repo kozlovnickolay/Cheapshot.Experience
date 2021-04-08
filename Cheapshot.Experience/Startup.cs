@@ -31,7 +31,8 @@ namespace Cheapshot.Experience {
             });
 
             services.AddDbContext<DataContext>(options => {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                sqlServerOptions => sqlServerOptions.CommandTimeout(120));
             });
             services.AddScoped<CitiesRepository>();
             services.AddScoped<UsersRepository>();

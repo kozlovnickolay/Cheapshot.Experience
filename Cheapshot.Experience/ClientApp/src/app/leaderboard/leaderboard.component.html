@@ -1,6 +1,15 @@
 <h1 id="tableLabel">World top</h1>
 
-<p *ngIf="!players"><em>Loading...</em></p>
+<!-- <mat-form-field appearance="fill">
+  <mat-label>Favorite food</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let food of foods" [value]="food.value">
+      {{food.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
+
+<p *ngIf="!players"><em>Loading leaderboard...</em></p>
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="players">
   <thead>

@@ -1,4 +1,5 @@
 ﻿using Cheapshot.Exprience.Data.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,10 @@ namespace Cheapshot.Exprience.Data.Repository {
 
         public void UpdateRange(IEnumerable<TEntity> entities) {
             m_dc.UpdateRange(entities);
+        }
+
+        public void ExecuteSqlRaw(string sql) {
+            m_dc.Database.ExecuteSqlRaw(sql);
         }
     }
 }

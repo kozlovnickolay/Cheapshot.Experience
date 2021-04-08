@@ -30,17 +30,29 @@ namespace Cheapshot.Inspector {
         }
 
         public void GetNewData(object state) {
-            using (var scope = m_scopeFactory.CreateScope()) {
-                var dc = scope.ServiceProvider.GetService<IWorkerContext>();
-                var cities = dc.GetAllCities();
+            var utcNow = DateTime.UtcNow.TimeOfDay;
+            var etalonStart = new TimeSpan(18, 55, 0);
+            var etalonEnd = new TimeSpan(19, 5, 0);
 
-                foreach (var city in cities) {
-                    DownloadUsersFromInspectByCity(city);
+            if (utcNow > etalonStart && utcNow < etalonEnd) {
+                m_logger.LogInformation($"Начало загрузки статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!"); ;
+                using (var scope = m_scopeFactory.CreateScope()) {
+                    var start = DateTime.UtcNow;
+                    var dc = scope.ServiceProvider.GetService<IWorkerContext>();
+                    var cities = dc.GetAllCities();
+
+                    foreach (var city in cities) {
+                        DownloadUsersFromInspectByCity(city);
+                    }
+                    UpdateUsers(dc);
+                    InsertExperience(dc);
+                    Clear();
+                    m_logger.LogInformation($"Загрузка статистики выполнена за {(DateTime.UtcNow - start).TotalSeconds} секунд!"); ;
+
                 }
-                UpdateUsers(dc);
-                InsertExperience(dc);
-                Clear();
-            }
+            } else
+                m_logger.LogInformation($"Неподходящее время сбора статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!"); ;
+
         }
 
 
@@ -91,8 +103,6 @@ namespace Cheapshot.Inspector {
 
         private void UpdateUsers(IWorkerContext dc) {
             var existingUsers = dc.GetAllUsers();
-
-            //var newUsers = new List<UserEntity>();
             var insertOrUpdateUsers = new List<UserEntity>();
             var newUsersCount = 0;
             var updateUsersCount = 0;
@@ -116,13 +126,9 @@ namespace Cheapshot.Inspector {
                             });
                             newUsersCount++;
                         }
-
                     }
                 }
             }
-
-            //dc.InsertRangeUsers(newUsers.ToArray());
-            //m_logger.LogInformation($"Добавлено {newUsers.Count} новых игроков");
 
             dc.UpdateRangeUsers(insertOrUpdateUsers.ToArray());
             m_logger.LogInformation($"Добавлено {newUsersCount} новых игроков");
@@ -132,12 +138,13 @@ namespace Cheapshot.Inspector {
         private void InsertExperience(IWorkerContext dc) {
             var users = dc.GetAllUsers().ToList();
             var updateExperience = new List<ExperienceEntity>();
+            var today = new DateTime(2021, 4, 11).Date;
 
             foreach (var collection in InspectCollection) {
                 foreach (var user in collection.Users) {
                     updateExperience.Add(new ExperienceEntity {
                         CityId = collection.CityId,
-                        Date = DateTime.Now.Date,
+                        Date = today,
                         UserId = users.Single(x => x.UserId == user.UserId).Id,
                         Xp = user.Xp
                     });
@@ -145,8 +152,10 @@ namespace Cheapshot.Inspector {
             }
 
             dc.InsertRangeExperience(updateExperience.ToArray());
-            m_logger.LogInformation($"Добавлено {updateExperience.Count} новых записей опыта");
 
+            dc.EqualizeExperience(today);
+
+            m_logger.LogInformation($"Добавлено {updateExperience.Count} новых записей опыта");
         }
 
         private void Clear() {

@@ -62,5 +62,10 @@ namespace Cheapshot.Inspector.Services {
             m_users.UpdateRange(users);
             m_users.SaveChanges();
         }
+
+        public void EqualizeExperience(DateTime date) {
+            var stringDate = date.ToString("yyyy-MM-dd");
+            m_exps.ExecuteSqlRaw($"update experience e set xp = e2.xp from(select userid, MAX(xp) as xp from experience where \"date\" = '{stringDate}' group by 1) as e2 where e.\"date\" = '{stringDate}' and e.userid = e2.userid");
+        }
     }
 }
