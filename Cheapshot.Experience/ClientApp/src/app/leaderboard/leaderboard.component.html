@@ -1,15 +1,15 @@
 <h1 id="tableLabel">World top</h1>
 
-<mat-form-field appearance="fill">
-  <mat-label>Favorite food</mat-label>
-  <mat-select>
+<mat-form-field>
+  <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
+    <mat-option value="world">World</mat-option>
     <mat-option *ngFor="let city of cities" [value]="city.id">
-      {{city.name}}
+      {{ city.name }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 
-<p *ngIf="!players"><em>Loading leaderboard...</em></p>
+<p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="players">
   <thead>
