@@ -12,5 +12,11 @@ namespace Cheapshot.Exprience.Data.Model {
         [NotMapped]
         public Location[] Locations => JsonSerializer.Deserialize<Location[]>(Points);
         public List<ExperienceEntity> ExperienceEntities { get; set; }
+
+        [Column("country")]
+        public string Country { get; set; }
+
+        [Column("flag")]
+        public string Flag { get; set; }
     }
 }

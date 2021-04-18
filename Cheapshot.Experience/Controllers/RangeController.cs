@@ -6,13 +6,13 @@ using System;
 namespace Cheapshot.Experience.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class TopController : ControllerBase {
+    public class RangeController : ControllerBase {
 
-        private readonly ILogger<TopController> _logger;
+        private readonly ILogger<RangeController> _logger;
         private readonly ITopService m_service;
 
 
-        public TopController(ILogger<TopController> logger, ITopService service) {
+        public RangeController(ILogger<RangeController> logger, ITopService service) {
             _logger = logger;
             m_service = service;
         }
@@ -20,8 +20,6 @@ namespace Cheapshot.Experience.Controllers {
         [HttpGet]
         public object Get(Guid cityId, DateTime startDate, DateTime endDate) {
             return m_service.GetRangeTopPlayersByCityId(cityId, startDate, endDate);
-
-            //return m_service.GetTopPlayersByCityId(cityId);
         }
     }
 }

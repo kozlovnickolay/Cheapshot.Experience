@@ -1,11 +1,14 @@
-<h1 id="tableLabel">World top</h1>
+<h3 id="tableLabel">{{ title }}</h3>
 
-<mat-form-field>
+<mat-form-field *ngIf="countryGroups.length > 0">
+  <mat-label>Leaderboard by city</mat-label>
   <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
-    <mat-option value="world">World</mat-option>
-    <mat-option *ngFor="let city of cities" [value]="city.id">
-      {{ city.name }}
-    </mat-option>
+    <mat-option value="world"><span [class]="font.csemoji('🌍', 16)"></span> World</mat-option>
+    <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
+      <mat-option *ngFor="let city of group.cities" [value]="city">
+        {{city.name}}
+      </mat-option>
+    </mat-optgroup>
   </mat-select>
 </mat-form-field>
 

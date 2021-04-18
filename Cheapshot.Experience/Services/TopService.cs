@@ -34,6 +34,17 @@ namespace Cheapshot.Experience.Services {
             return GetTopFromSearch(top).Take(1000);
         }
 
+        public DateTime GetMaxMinDate(string type) {
+            if (type == "max")
+                return m_exp.GetAll().Max(x => x.Date).Date;
+            else if (type == "min")
+                return m_exp.GetAll().Min(x => x.Date).Date;
+            else
+                return DateTime.UtcNow.Date;
+        }
+
+
+
 
         IEnumerable<Top> GetTopFromSearch(IQueryable<ExperienceEntity> search) {
             var result = search
@@ -43,7 +54,7 @@ namespace Cheapshot.Experience.Services {
                     Id = x.UserId,
                     Level = x.User.Level,
                     Xp = x.Xp,
-                    City = x.City.Name
+                    City = $"{ x.City.Flag} {x.City.Name}"
                 })
                 .ToList();
 
@@ -61,7 +72,7 @@ namespace Cheapshot.Experience.Services {
                     string.Join(", ", x.Select(y => y.City).OrderBy(o => o))
                     ))
                 .OrderByDescending(x => x.Xp);
-                //.Take(1000);
+            //.Take(1000);
             return grouped;
         }
 

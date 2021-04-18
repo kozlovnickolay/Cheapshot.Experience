@@ -16,5 +16,8 @@ namespace Cheapshot.Exprience.Data.Model {
         public short Level { get; set; }
 
         public List<ExperienceEntity> ExperienceEntities { get; set; }
+
+        [Column("visible")]
+        public bool Visible { get; set; }
     }
 }

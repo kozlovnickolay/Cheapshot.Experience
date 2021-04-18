@@ -8,10 +8,13 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { DailyComponent } from './daily/daily.component';
 import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {  MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
+import { ByLevelComponent } from './by-level/by-level.component';
+import { MatButtonModule, MatButtonToggleModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSpinner } from '@angular/material';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [
@@ -19,22 +22,33 @@ import {  MatSelectModule } from '@angular/material/select';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    LeaderboardComponent,
-    ThousandSuffixesPipe
+    DailyComponent,
+    ThousandSuffixesPipe,
+    ByLevelComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'leaderboard', component: LeaderboardComponent },
+      { path: 'daily', component: DailyComponent },
+      { path: '', component: ByLevelComponent, pathMatch: 'full' },
+      { path: 'about', component: HomeComponent },
+
     ]),
     BrowserAnimationsModule,
-    MatSelectModule    
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    OverlayModule,
+    MatButtonToggleModule,
+    MatButtonModule,
+
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [MatSpinner]
 })
 export class AppModule { }

@@ -1,0 +1,65 @@
+<mat-button-toggle-group style="float: right;" name="fontStyle" aria-label="Font Style" [(ngModel)]="dailyType"
+  (change)="onChangeDailyType()">
+  <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
+  <mat-button-toggle [value]="1">Week</mat-button-toggle>
+  <mat-button-toggle [value]="2">Month</mat-button-toggle>
+  <mat-button-toggle [value]="3">Custom</mat-button-toggle>
+</mat-button-toggle-group>
+
+
+<h3 id="tableLabel">{{ title }}</h3>
+
+<mat-form-field *ngIf="countryGroups.length > 0">
+  <mat-label>Leaderboard by city</mat-label>
+  <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
+    <mat-option value="world"><span [class]="font.csemoji('🌍', 16)"></span> World</mat-option>
+    <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
+      <mat-option *ngFor="let city of group.cities" [value]="city.id">
+        {{city.name}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-select>
+</mat-form-field>
+
+<div *ngIf="dailyType === 3 && minDate && maxDate">
+  <mat-form-field class="example-full-width">
+    <input matInput [value]="startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerStart"
+      placeholder="Choose start date" [(ngModel)]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+    <mat-datepicker #pickerStart></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput [value]="endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerEnd"
+      placeholder="Choose end date" [(ngModel)]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button (click)="onSubmitClick()">Submit</button>
+</div>
+
+
+
+<p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="players">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Level</th>
+      <th>Xp</th>
+      <th>Cities</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let top of players; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td><span [class]="font.csemoji(top.pic, 32)">top.pic</span> {{ top.name }}</td>
+      <td>{{ top.level }}</td>
+      <td>{{ top.xp | thousandSuff : 2 }}</td>
+      <td>{{ top.cities }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -2,18 +2,21 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CheapshotFont } from '../fonts/file';
 import { Player } from '../model/Player';
+import { CountryGroup } from '../model/CountryGroup';
 import { City } from '../model/City';
 
 @Component({
-  selector: 'app-fetch-data',
-  templateUrl: './leaderboard.component.html'
+  selector: 'app-by-level',
+  templateUrl: './by-level.component.html'
 })
-export class LeaderboardComponent {
-  public players: Player[];
-  public cities: City[];
+export class ByLevelComponent {
+  public players: Player[] = [];
+  public countryGroups: CountryGroup[] = [];
   public font = new CheapshotFont();
 
-  city: string;
+  city: City;
+
+  title: string = "World top by level";
 
   m_http: HttpClient;
   m_baseUrl: string
@@ -21,35 +24,38 @@ export class LeaderboardComponent {
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
-    http.get<City[]>(baseUrl + 'city').subscribe(result => {
-      this.cities = result;
-    }, error => console.error(error));
+  }
 
+  ngOnInit() {
+    this.loadCities();
     this.load(undefined);
+  }
 
-
+  loadCities() {
+    this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
+      this.countryGroups = result;
+    }, error => console.error(error));
   }
 
   onChangeCity() {
-    console.log(this.city);
+    if (this.city.id && this.city.id !== "world")
+      this.title = `${this.city.name} top by level`
+    else
+      this.title = "World top by level"
+
     this.players = [];
-    this.load(this.city);
+    this.load(this.city.id);
   }
 
   load(cityId: string) {
 
-
-    let params = new HttpParams()
-      .set("startDate", "2021-04-07")
-      .set("endDate", "2021-04-08");
+    let params = new HttpParams();
 
     if (cityId && cityId !== "world")
       params = new HttpParams()
-        .set("startDate", "2021-04-07")
-        .set("endDate", "2021-04-08")
         .set("cityId", cityId);
 
-    this.m_http.get<Player[]>(this.m_baseUrl + 'top', {
+    this.m_http.get<Player[]>(this.m_baseUrl + 'level', {
       params
     }).subscribe(result => {
       this.players = result;

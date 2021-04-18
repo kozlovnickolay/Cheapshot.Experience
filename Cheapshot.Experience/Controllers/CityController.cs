@@ -22,8 +22,11 @@ namespace Cheapshot.Experience.Controllers {
         }
 
         [HttpGet]
-        public object Get() {
-            return m_service.GetAllCities();
+        public object Get(string country) {
+            if (string.IsNullOrEmpty(country))
+                return m_service.GetAllCountries();
+            else
+                return m_service.GetCitiesByCountry(country);
         }
     }
 }

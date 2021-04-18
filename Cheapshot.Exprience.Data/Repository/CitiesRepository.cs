@@ -15,6 +15,9 @@ namespace Cheapshot.Exprience.Data.Repository {
         public CitiesRepository(DataContext context) : base(context) {
         }
 
+        public IQueryable<CityEntity> GetByCountry(string country) {
+            return GetAll().Where(x => x.Country == country);
+        }
 
     }
 }
