@@ -1,8 +1,5 @@
 version: '3.1'
 
-volumes:
-  pg_project:
-
 services:
   pg_db:
     image: postgres
@@ -14,9 +11,12 @@ services:
     volumes:
       - pg_project:/var/lib/postgresql/data
     ports:
-      - ${POSTGRES_PORT:-5432}:5432
-  adminer:
-    image: adminer
+      - 5432:5432
+  service:
+    image: nickkozlov/cheapexp:1.0.5
     restart: always
     ports:
-      - 8080:8080
+      - 9000:80
+      
+volumes:
+  pg_project:

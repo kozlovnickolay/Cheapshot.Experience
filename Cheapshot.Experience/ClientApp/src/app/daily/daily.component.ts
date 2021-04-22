@@ -5,10 +5,15 @@ import { Player } from '../model/Player';
 import { CountryGroup } from '../model/CountryGroup';
 import { UiService } from '../ui.service';
 import { DailyType } from './DailyType';
+import { DatePipe } from '@angular/common';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material';
 
 @Component({
   selector: 'app-daily-data',
-  templateUrl: './daily.component.html'
+  templateUrl: './daily.component.html',
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+  ],
 })
 export class DailyComponent {
   public players: Player[] = [];
@@ -30,10 +35,12 @@ export class DailyComponent {
   endDate: Date;
   title: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService, private _adapter: DateAdapter<any>) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
     this.m_ui = ui;
+
+    this._adapter.setLocale('ru');
   }
 
   async ngOnInit() {
@@ -114,8 +121,8 @@ export class DailyComponent {
     this.ui.spin$.next(true);
 
     let params = new HttpParams()
-      .set("startDate", this.startDate.toISOString())
-      .set("endDate", this.endDate.toISOString());
+      .set("startDate", this.getIsoDateString(this.startDate))
+      .set("endDate", this.getIsoDateString(this.endDate));
 
     if (cityId && cityId !== "world")
       params = params.append("cityId", cityId);
@@ -127,5 +134,9 @@ export class DailyComponent {
       this.ui.spin$.next(false);
     }, error => console.error(error));
 
+  }
+
+  getIsoDateString(date: Date){
+    return new DatePipe('en-US').transform(date, 'yyyy-MM-dd');
   }
 }
