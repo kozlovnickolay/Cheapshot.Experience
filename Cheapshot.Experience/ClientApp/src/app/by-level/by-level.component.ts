@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CheapshotFont } from '../fonts/file';
+import { CheapshotFont } from '../fonts/CheapshotFont';
 import { Player } from '../model/Player';
 import { CountryGroup } from '../model/CountryGroup';
 import { City } from '../model/City';
@@ -12,7 +12,6 @@ import { City } from '../model/City';
 export class ByLevelComponent {
   public players: Player[] = [];
   public countryGroups: CountryGroup[] = [];
-  public font = new CheapshotFont();
 
   city: City;
 
@@ -21,7 +20,7 @@ export class ByLevelComponent {
   m_http: HttpClient;
   m_baseUrl: string
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
   }

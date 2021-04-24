@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CheapshotFont } from '../fonts/file';
+import { CheapshotFont } from '../fonts/CheapshotFont';
 
 @Component({
   selector: 'app-nav-menu',
@@ -8,7 +8,10 @@ import { CheapshotFont } from '../fonts/file';
 })
 export class NavMenuComponent {
   isExpanded = false;
-  public font = new CheapshotFont();
+
+  constructor(public font: CheapshotFont){
+
+  }
 
   collapse() {
     this.isExpanded = false;

@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
 import { CounterComponent } from './counter/counter.component';
 import { DailyComponent } from './daily/daily.component';
 import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
@@ -20,7 +20,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
+    AboutComponent,
     CounterComponent,
     DailyComponent,
     ThousandSuffixesPipe,
@@ -33,7 +33,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
     RouterModule.forRoot([
       { path: 'daily', component: DailyComponent },
       { path: '', component: ByLevelComponent, pathMatch: 'full' },
-      { path: 'about', component: HomeComponent },
+      { path: 'about', component: AboutComponent },
 
     ]),
     BrowserAnimationsModule,
