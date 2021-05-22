@@ -1,7 +1,8 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Cheapshot<span [class]="font.csemoji('🎖', 16)"></span>Experience<sup>(beta)</sup></a>
+      <a class="navbar-brand" [routerLink]="['/']">Cheapshot<span
+          [class]="font.csemoji('🎖', 16)"></span>Experience<sup>(beta)</sup></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
@@ -9,13 +10,16 @@
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/']">By level</a>
+            <a class="nav-link" [routerLink]="['/']">By level</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/daily']">Daily</a>
+            <a class="nav-link" [routerLink]="['/daily']">Daily</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/explore']">Explore</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/about']">About</a>
+            <a class="nav-link" [routerLink]="['/about']">About</a>
           </li>
         </ul>
       </div>

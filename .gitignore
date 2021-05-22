@@ -234,3 +234,6 @@ bin
 Cheapshot.Inspector/Api/Resource.resx
 Cheapshot.Inspector/Api/Resource.Designer.cs
 .vs/Cheapshot.Experience/v16/.suo
+*.tar
+Cheapshot.Inspector/Api/Resource.resx
+Cheapshot.Inspector/Api/Resource.Designer.cs

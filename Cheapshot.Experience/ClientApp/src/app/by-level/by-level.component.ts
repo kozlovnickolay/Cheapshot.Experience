@@ -4,14 +4,19 @@ import { CheapshotFont } from '../fonts/CheapshotFont';
 import { Player } from '../model/Player';
 import { CountryGroup } from '../model/CountryGroup';
 import { City } from '../model/City';
+import { MatBottomSheet } from '@angular/material';
+import { PlayerBottomSheet } from '../player-bottom-sheet/player-bottom-sheet';
 
 @Component({
   selector: 'app-by-level',
-  templateUrl: './by-level.component.html'
+  templateUrl: './by-level.component.html',
+  styleUrls: ['./by-level.component.css']
 })
 export class ByLevelComponent {
   public players: Player[] = [];
   public countryGroups: CountryGroup[] = [];
+
+  private maxXp: number;
 
   city: City;
 
@@ -20,7 +25,7 @@ export class ByLevelComponent {
   m_http: HttpClient;
   m_baseUrl: string
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
   }
@@ -58,7 +63,28 @@ export class ByLevelComponent {
       params
     }).subscribe(result => {
       this.players = result;
+      result.length > 0 ? this.maxXp = result[0].xp : 0;
     }, error => console.error(error));
 
+  }
+
+  getTopPercent(xp: number) {
+    return Math.round((Math.sqrt(xp) / Math.sqrt(this.maxXp)) * 100);
+  }
+
+  getUserRowStyle(xp: number) {
+    const percent = this.getTopPercent(xp);
+    const background = 'linear-gradient(to right, hsl(195, 100%, ' + (25 + Math.round(percent / 3)) + '%) ' + percent + '%, #00000038 ' + percent + '%)';
+    const borderBottom = '1px solid #343a40';
+    return {
+      background,
+      borderBottom
+    };
+  }
+
+  openPlayerBottomSheet(player: Player): void {
+    this._bottomSheet.open(PlayerBottomSheet, {
+      data: player
+    });
   }
 }

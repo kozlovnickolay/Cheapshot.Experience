@@ -13,8 +13,12 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
-import { MatButtonModule, MatButtonToggleModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSpinner } from '@angular/material';
+import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSpinner } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { ExploreComponent } from './explore/explore.component';
+import { MatListModule } from '@angular/material/list';
+import { CommonModule } from '@angular/common';
+import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { OverlayModule } from '@angular/cdk/overlay';
     CounterComponent,
     DailyComponent,
     ThousandSuffixesPipe,
-    ByLevelComponent
+    ByLevelComponent,
+    ExploreComponent,
+    PlayerBottomSheet
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,7 +40,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
       { path: 'daily', component: DailyComponent },
       { path: '', component: ByLevelComponent, pathMatch: 'full' },
       { path: 'about', component: AboutComponent },
-
+      { path: 'explore', component: ExploreComponent }
     ]),
     BrowserAnimationsModule,
     MatSelectModule,
@@ -45,8 +51,11 @@ import { OverlayModule } from '@angular/cdk/overlay';
     OverlayModule,
     MatButtonToggleModule,
     MatButtonModule,
-
-  ],
+    MatListModule,
+    MatSidenavModule,
+    MatBottomSheetModule,
+    MatSlideToggleModule,
+    CommonModule],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [MatSpinner]

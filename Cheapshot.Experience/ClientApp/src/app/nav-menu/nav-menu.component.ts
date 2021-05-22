@@ -8,7 +8,6 @@ import { CheapshotFont } from '../fonts/CheapshotFont';
 })
 export class NavMenuComponent {
   isExpanded = false;
-
   constructor(public font: CheapshotFont){
 
   }

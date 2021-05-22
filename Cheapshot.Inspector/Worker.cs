@@ -26,7 +26,6 @@ namespace Cheapshot.Inspector {
             m_logger = logger;
             m_inspectService = new InspectService();
             InspectCollection = new List<InspectCollection>();
-
         }
 
         public void GetNewData(object state) {
@@ -55,11 +54,10 @@ namespace Cheapshot.Inspector {
 
         }
 
-
         public Task StartAsync(CancellationToken cancellationToken) {
             m_logger.LogInformation("Timed Background Service is starting.");
 
-            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(360));
+            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(600));
 
             return Task.CompletedTask;
         }

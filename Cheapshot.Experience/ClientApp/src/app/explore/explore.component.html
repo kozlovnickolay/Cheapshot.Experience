@@ -1,0 +1,14 @@
+<div class="explore">
+  <h1>Cheapshot Cities</h1>
+  <p>See what's happening around the world now:</p>
+
+  <div *ngFor="let country of countryGroups">
+    <p class="country-title">{{ country.name }}</p>
+    <div *ngFor="let city of country.cities">
+      <a *ngFor="let point of city.points; let i = index" [attr.href]="getCheapshotLink(point)">
+        {{ getCityName(city.name, i+1, city.points.length) }}
+      </a>
+    </div>
+  </div>
+</div>
+

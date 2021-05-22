@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\custom-pipes\ThousandSuffixesPipe.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\fonts\file.ts" />
   </ItemGroup>
 
   <ItemGroup>

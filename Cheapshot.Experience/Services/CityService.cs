@@ -23,7 +23,7 @@ namespace Cheapshot.Experience.Services {
         }
 
         public CountryGroup[] GetAllCountries() {
-            var countries = m_cities.GetAll().ToList();
+            var countries = m_cities.GetAll().ToList().OrderBy(x => x.Country);
 
             var countryGroup = countries
                 .GroupBy(x => new { x.Flag, x.Country })
@@ -31,7 +31,8 @@ namespace Cheapshot.Experience.Services {
                     Name = $"{x.Key.Flag} {x.Key.Country}",
                     Cities = x.Select(c => new City {
                         Id = c.Id,
-                        Name = c.Name
+                        Name = c.Name,
+                        Points = c.Locations
                     })
                     .OrderBy(c => c.Name)
                     .ToArray()
@@ -55,8 +56,11 @@ namespace Cheapshot.Experience.Services {
         }
 
         City MapCityModel(CityEntity c) {
-            return new City { Id = c.Id, Name = c.Name };
+            return new City { 
+                Id = c.Id,
+                Name = c.Name,
+                Points = c.Locations
+            };
         }
-
     }
 }

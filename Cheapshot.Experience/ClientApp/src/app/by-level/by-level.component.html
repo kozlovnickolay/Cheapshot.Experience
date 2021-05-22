@@ -14,23 +14,22 @@
 
 <p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="players">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Level</th>
-      <th>Xp</th>
-      <th>Cities</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let top of players; let i = index">
-      <td>{{ i + 1 }}</td>
-      <td><span [class]="font.csemoji(top.pic, 32)">top.pic</span> {{ top.name }}</td>
-      <td>{{ top.level }}</td>
-      <td>{{ top.xp | thousandSuff : 2 }}</td>
-      <td>{{ top.cities }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="lvl-top">
+  <div class="cp-container">
+    <div id="users-cp-container">
+      <div id="users">
+        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)" (click)="openPlayerBottomSheet(player)">
+          <div class="cp-col index">{{ i + 1 }}</div>
+          <div class="cp-col userpic emoji">
+            <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>
+          </div>
+          <div class="cp-col info">{{ player.name }}</div>
+          <div class="cp-col rating">
+            <span class="xp">{{ player.xp | thousandSuff : 2 }}</span>
+            <span class="level">{{ player.level }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
