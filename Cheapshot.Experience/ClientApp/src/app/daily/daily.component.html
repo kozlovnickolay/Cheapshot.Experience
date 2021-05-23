@@ -1,49 +1,45 @@
-<div class="container-main">
-
-  <mat-button-toggle-group [(ngModel)]="dailyType"
-    (change)="onChangeDailyType()">
-    <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
-    <mat-button-toggle [value]="1">Week</mat-button-toggle>
-    <mat-button-toggle [value]="2">Month</mat-button-toggle>
-    <mat-button-toggle [value]="3">Custom</mat-button-toggle>
-  </mat-button-toggle-group>
+<mat-button-toggle-group style="float: right;" name="fontStyle" aria-label="Font Style" [(ngModel)]="dailyType"
+  (change)="onChangeDailyType()">
+  <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
+  <mat-button-toggle [value]="1">Week</mat-button-toggle>
+  <mat-button-toggle [value]="2">Month</mat-button-toggle>
+  <mat-button-toggle [value]="3">Custom</mat-button-toggle>
+</mat-button-toggle-group>
 
 
-  <h1>{{ title }}</h1>
-  <h4>{{ reportPeriood }}</h4>
+<h3 id="tableLabel">{{ title }}</h3>
 
+<mat-form-field *ngIf="countryGroups.length > 0">
+  <mat-label>Leaderboard by city</mat-label>
+  <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
+    <mat-option value="world"><span [class]="font.csemoji('🌍', 16)"></span> World</mat-option>
+    <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
+      <mat-option *ngFor="let city of group.cities" [value]="city.id">
+        {{city.name}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-select>
+</mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Leaderboard by city</mat-label>
-    <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
-      <mat-option value="world">🌍 World</mat-option>
-      <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <mat-option *ngFor="let city of group.cities" [value]="city.id">
-          {{city.name}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-select>
+<div *ngIf="dailyType === 3 && minDate && maxDate">
+  <mat-form-field class="example-full-width">
+    <input matInput [value]="startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerStart"
+      placeholder="Choose start date" [(ngModel)]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+    <mat-datepicker #pickerStart></mat-datepicker>
   </mat-form-field>
 
-  <div *ngIf="dailyType === 3 && minDate && maxDate">
-    <mat-form-field class="example-full-width">
-      <input matInput [value]="startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerStart"
-        placeholder="Choose start date" [(ngModel)]="startDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-      <mat-datepicker #pickerStart></mat-datepicker>
-    </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput [value]="endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerEnd"
+      placeholder="Choose end date" [(ngModel)]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
 
-    <mat-form-field class="example-full-width">
-      <input matInput [value]="endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerEnd"
-        placeholder="Choose end date" [(ngModel)]="endDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-      <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
-
-    <button mat-raised-button (click)="onSubmitClick()">Submit</button>
-  </div>
-
+  <button mat-raised-button (click)="onSubmitClick()">Submit</button>
 </div>
+
+
 
 <p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
 
@@ -51,8 +47,7 @@
   <div class="cp-container">
     <div id="users-cp-container">
       <div id="users">
-        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)"
-          (click)="openPlayerBottomSheet(player)">
+        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)" (click)="openPlayerBottomSheet(player)">
           <div class="cp-col index">{{ i + 1 }}</div>
           <div class="cp-col userpic emoji">
             <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>

@@ -30,15 +30,15 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
     ThousandSuffixesPipe,
     ByLevelComponent,
     ExploreComponent,
-    PlayerBottomSheet],
+    PlayerBottomSheet
+  ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: ByLevelComponent, pathMatch: 'full' },
       { path: 'daily', component: DailyComponent },
-      { path: 'bylevel/:city', component: ByLevelComponent },
+      { path: '', component: ByLevelComponent, pathMatch: 'full' },
       { path: 'about', component: AboutComponent },
       { path: 'explore', component: ExploreComponent }
     ]),
@@ -55,10 +55,9 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
     MatSidenavModule,
     MatBottomSheetModule,
     MatSlideToggleModule,
-    CommonModule
-  ],
+    CommonModule],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [MatSpinner, PlayerBottomSheet]
+  entryComponents: [MatSpinner]
 })
 export class AppModule { }

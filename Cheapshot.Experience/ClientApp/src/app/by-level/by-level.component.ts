@@ -6,7 +6,6 @@ import { CountryGroup } from '../model/CountryGroup';
 import { City } from '../model/City';
 import { MatBottomSheet } from '@angular/material';
 import { PlayerBottomSheet } from '../player-bottom-sheet/player-bottom-sheet';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-by-level',
@@ -21,39 +20,24 @@ export class ByLevelComponent {
 
   city: City;
 
-  title: string = "World top";
+  title: string = "World top by level";
 
   m_http: HttpClient;
   m_baseUrl: string
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet, private route: ActivatedRoute) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
   }
 
-  async ngOnInit() {
-    let defaultCity;
-    this.sub = this.route.params.subscribe(params => {
-      defaultCity = params['city'];
-    });
-    this.loadCities(defaultCity);
+  ngOnInit() {
+    this.loadCities();
+    this.load(undefined);
   }
 
-  setDefaultIdByName(name: string) {
-    this.countryGroups.forEach(x => {
-      x.cities.forEach(c => {
-        if (c.name.toLowerCase() === name.toLowerCase())
-          this.city = c;
-      })
-    })
-  }
-
-  loadCities(defaultCity: string) {
+  loadCities() {
     this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
       this.countryGroups = result;
-      if (defaultCity)
-        this.setDefaultIdByName(defaultCity);
-      this.load(this.city && this.city.id ? this.city.id : undefined);
     }, error => console.error(error));
   }
 
@@ -96,12 +80,6 @@ export class ByLevelComponent {
       background,
       borderBottom
     };
-  }
-
-  private sub: any;
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   openPlayerBottomSheet(player: Player): void {

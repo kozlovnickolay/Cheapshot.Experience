@@ -1,27 +1,24 @@
-<div class="container-main">
-  <h1>{{ title }}</h1>
+<h3 id="tableLabel">{{ title }}</h3>
 
-  <mat-form-field>
-    <mat-label>Leaderboard by city</mat-label>
-    <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
-      <mat-option value="world">🌍 World</mat-option>
-      <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <mat-option *ngFor="let city of group.cities" [value]="city">
-          {{city.name}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-select>
-  </mat-form-field>
+<mat-form-field *ngIf="countryGroups.length > 0">
+  <mat-label>Leaderboard by city</mat-label>
+  <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
+    <mat-option value="world"><span [class]="font.csemoji('🌍', 16)"></span> World</mat-option>
+    <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
+      <mat-option *ngFor="let city of group.cities" [value]="city">
+        {{city.name}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-select>
+</mat-form-field>
 
-  <p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
-</div>
+<p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
 
 <div class="lvl-top">
   <div class="cp-container">
     <div id="users-cp-container">
       <div id="users">
-        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)"
-          (click)="openPlayerBottomSheet(player)">
+        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)" (click)="openPlayerBottomSheet(player)">
           <div class="cp-col index">{{ i + 1 }}</div>
           <div class="cp-col userpic emoji">
             <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>

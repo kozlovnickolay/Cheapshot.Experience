@@ -4,13 +4,12 @@ html {
 * { box-sizing: border-box; }
 * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 .lvl-top {
-  margin: auto;
+  margin: 0;
   padding: 0;
   /* background-color: black; */
   color: white;
   font-weight: 700;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  max-width: 1140px;
 }
 a {
   text-decoration: none;
@@ -92,8 +91,6 @@ a {
   
   display: flex;
   flex-direction: column;
-
-  word-break: break-all;
 }
 /* .cp-col.info .username {
   word-break: keep-all;

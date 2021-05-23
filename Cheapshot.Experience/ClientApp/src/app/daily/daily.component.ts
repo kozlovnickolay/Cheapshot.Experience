@@ -37,7 +37,6 @@ export class DailyComponent {
   startDate: Date;
   endDate: Date;
   title: string;
-  reportPeriood: string;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService, private _adapter: DateAdapter<any>, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
@@ -74,10 +73,12 @@ export class DailyComponent {
 
   onChangeCity() {
     console.log(this.city);
+    this.clearTable();
     this.load(this.city);
   }
 
   onSubmitClick() {
+    this.clearTable();
     this.load(this.city);
   }
 
@@ -87,33 +88,32 @@ export class DailyComponent {
   }
 
   onChangeDailyType() {
+    this.clearTable();
+
     switch (this.dailyType) {
       case DailyType.Day: {
         this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 1);
         this.endDate = this.maxDate;
-        this.title = `Daily report`;
-        this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
+        this.title = `Daily report ${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`
         break;
       }
       case DailyType.Week: {
         this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 7);
         this.endDate = this.maxDate;
-        this.title = `Weekly report`
-        this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
+        this.title = `Weekly report ${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`
+
         break;
       }
       case DailyType.Month: {
         this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 30);
         this.endDate = this.maxDate;
-        this.title = `Monthly report`
-        this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
+        this.title = `Monthly report ${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`
         break;
       }
       case DailyType.Custom: {
         this.startDate = this.minDate;
         this.endDate = this.maxDate;
-        this.title = `Custom report`;
-        this.reportPeriood = ``;
+        this.title = `Custom report`
         break;
       }
     }
@@ -133,7 +133,6 @@ export class DailyComponent {
     this.m_http.get<Player[]>(this.m_baseUrl + 'range', {
       params
     }).subscribe(result => {
-      this.clearTable();
       this.players = result;
       result.length > 0 ? this.maxXp = result[0].xp : 0;
       this.ui.spin$.next(false);
