@@ -8,9 +8,7 @@ import { Player } from "../model/Player";
     templateUrl: 'player-bottom-sheet.html',
     styleUrls: ['player-bottom-sheet.css']
 })
-
 export class PlayerBottomSheet {
-
 
     constructor(private _bottomSheetRef: MatBottomSheetRef<PlayerBottomSheet>,
         @Inject(MAT_BOTTOM_SHEET_DATA) public data: Player,
