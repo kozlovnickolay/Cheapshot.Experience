@@ -43,6 +43,7 @@ h3 {
 }
 
 .container {
+  /* height: 100%; */
   padding-right: 0px;
   padding-left: 0px;
 }
@@ -50,4 +51,14 @@ h3 {
 .container-main {
   padding-right: 15px;
   padding-left: 15px;
+  padding-top: 15px;
+}
+
+.scroll-container {
+  height: 100%;
+  overflow: auto;
+}
+
+.navbar.navbar-dark.navbar-expand-sm.navbar-toggleable-sm {
+  margin-bottom: 0px !important;
 }

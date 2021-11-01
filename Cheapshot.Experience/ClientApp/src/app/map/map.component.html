@@ -1,0 +1,12 @@
+<agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true" [styles]="styles"
+  (mapClick)="mapClick($event)">
+  <agm-kml-layer [url]="'https://www.google.com/maps/d/kml?mid=1r4_56P0XBSdgxpoYyHXSne_LbHUwwndE&lid=RGhFDbOb-KU'">
+    <agm-data-layer [geoJson]="featureCollection" [style]="styleFunc">
+
+    </agm-data-layer>cd
+  </agm-kml-layer>
+ 
+
+
+
+</agm-map>

@@ -38,7 +38,13 @@ export class ExploreComponent {
     return sanitizedUrl;
   }
 
-  getCityName(name: string, index: number, length: number) {
-    return length > 1 ? `${name} #${index}` : `${name}`;
+  getDailyLink(name: string) {
+    return `/daily/${name}`;
+    //const sanitizedUrl = this.sanitizer.bypassSecurityTrustUrl(`csx://location?lat=${point.lat}&lng=${point.lon}`);
+    //return sanitizedUrl;
+  }
+
+  getCityName(index: number) {
+    return `#${index}`;
   }
 }

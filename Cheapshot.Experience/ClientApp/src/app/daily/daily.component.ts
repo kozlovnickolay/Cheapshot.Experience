@@ -8,6 +8,8 @@ import { DailyType } from './DailyType';
 import { DatePipe } from '@angular/common';
 import { DateAdapter, MatBottomSheet, MAT_DATE_LOCALE } from '@angular/material';
 import { PlayerBottomSheet } from '../player-bottom-sheet/player-bottom-sheet';
+import { ActivatedRoute } from '@angular/router';
+import { City } from '../model/City';
 
 @Component({
   selector: 'app-daily-data',
@@ -23,7 +25,9 @@ export class DailyComponent {
 
   private maxXp: number;
 
-  city: string;
+  private sub: any;
+
+  city: City;
 
   dailyType: DailyType = 0;
 
@@ -39,7 +43,7 @@ export class DailyComponent {
   title: string;
   reportPeriood: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService, private _adapter: DateAdapter<any>, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService, private _adapter: DateAdapter<any>, public font: CheapshotFont, private _bottomSheet: MatBottomSheet, private route: ActivatedRoute) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
     this.m_ui = ui;
@@ -47,15 +51,36 @@ export class DailyComponent {
     this._adapter.setLocale('ru');
   }
 
+  //async ngOnInit() {
+  //await this.loadCities();
+  //  await this.loadDates();
+  //  this.onChangeDailyType();
+  //}
+
   async ngOnInit() {
-    await this.loadCities();
     await this.loadDates();
-    this.onChangeDailyType();
+    let defaultCity;
+    this.sub = this.route.params.subscribe(params => {
+      defaultCity = params['city'];
+    });
+    await this.loadCities(defaultCity);
   }
 
-  async loadCities() {
+  setDefaultCityByName(name: string) {
+    this.countryGroups.forEach(x => {
+      x.cities.forEach(c => {
+        if (c.name.toLowerCase() === name.toLowerCase())
+          this.city = c;
+      })
+    })
+  }
+
+  async loadCities(defaultCity: string) {
     await this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
       this.countryGroups = result;
+      if (defaultCity)
+        this.setDefaultCityByName(defaultCity);
+      this.onChangeDailyType();
     }, error => console.error(error));
   }
 
@@ -74,11 +99,11 @@ export class DailyComponent {
 
   onChangeCity() {
     console.log(this.city);
-    this.load(this.city);
+    this.load(this.city.id);
   }
 
   onSubmitClick() {
-    this.load(this.city);
+    this.load(this.city.id);
   }
 
   clearTable() {
@@ -117,7 +142,7 @@ export class DailyComponent {
         break;
       }
     }
-    this.load(this.city)
+    this.load(this.city && this.city.id ? this.city.id : undefined);
   }
 
   load(cityId: string) {

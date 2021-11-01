@@ -1,7 +1,6 @@
 <div class="container-main">
 
-  <mat-button-toggle-group [(ngModel)]="dailyType"
-    (change)="onChangeDailyType()">
+  <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
     <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
     <mat-button-toggle [value]="1">Week</mat-button-toggle>
     <mat-button-toggle [value]="2">Month</mat-button-toggle>
@@ -18,7 +17,7 @@
     <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
       <mat-option value="world">🌍 World</mat-option>
       <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <mat-option *ngFor="let city of group.cities" [value]="city.id">
+        <mat-option *ngFor="let city of group.cities" [value]="city">
           {{city.name}}
         </mat-option>
       </mat-optgroup>
@@ -45,7 +44,7 @@
 
 </div>
 
-<p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
+<p *ngIf="players.length === 0"><em>No data for this period...</em></p>
 
 <div class="lvl-top">
   <div class="cp-container">

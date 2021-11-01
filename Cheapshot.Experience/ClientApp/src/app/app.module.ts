@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AboutComponent } from './about/about.component';
@@ -19,6 +18,8 @@ import { ExploreComponent } from './explore/explore.component';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
+import { MapComponent } from './map/map.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
     ThousandSuffixesPipe,
     ByLevelComponent,
     ExploreComponent,
-    PlayerBottomSheet],
+    PlayerBottomSheet,
+    MapComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -38,9 +40,11 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
     RouterModule.forRoot([
       { path: '', component: ByLevelComponent, pathMatch: 'full' },
       { path: 'daily', component: DailyComponent },
+      { path: 'daily/:city', component: DailyComponent },
       { path: 'bylevel/:city', component: ByLevelComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'explore', component: ExploreComponent }
+      { path: 'explore', component: ExploreComponent },
+      { path: 'map', component: MapComponent }
     ]),
     BrowserAnimationsModule,
     MatSelectModule,
@@ -55,8 +59,10 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
     MatSidenavModule,
     MatBottomSheetModule,
     MatSlideToggleModule,
-    CommonModule
-  ],
+    CommonModule,
+    AgmCoreModule.forRoot({
+      apiKey: ''
+    })],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [MatSpinner, PlayerBottomSheet]

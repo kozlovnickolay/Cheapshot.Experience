@@ -13,7 +13,7 @@ services:
     ports:
       - 47543:5432
   service:
-    image: nickkozlov/cheapexp:1.1.0
+    image: nickkozlov/cheapexp:1.2.6
     restart: always
     ports:
       - 9000:80
