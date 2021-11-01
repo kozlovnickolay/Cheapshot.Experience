@@ -7,6 +7,6 @@ import { CheapshotFont } from '../fonts/CheapshotFont';
 })
 export class AboutComponent {
   constructor(public font: CheapshotFont){
-    
   }
+
 }

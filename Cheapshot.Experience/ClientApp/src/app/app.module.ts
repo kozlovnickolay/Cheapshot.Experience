@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
 import { MapComponent } from './map/map.component';
 import { AgmCoreModule } from '@agm/core';
+import { PicsComponent } from './pics/pics.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AgmCoreModule } from '@agm/core';
     ByLevelComponent,
     ExploreComponent,
     PlayerBottomSheet,
-    MapComponent],
+    MapComponent,
+    PicsComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -44,7 +46,8 @@ import { AgmCoreModule } from '@agm/core';
       { path: 'bylevel/:city', component: ByLevelComponent },
       { path: 'about', component: AboutComponent },
       { path: 'explore', component: ExploreComponent },
-      { path: 'map', component: MapComponent }
+      { path: 'map', component: MapComponent },
+      { path: 'pics', component: PicsComponent }
     ]),
     BrowserAnimationsModule,
     MatSelectModule,
