@@ -1,12 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { CheapshotFont } from '../fonts/CheapshotFont';
 import { MapTypeStyle, MouseEvent } from '@agm/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Point } from '../model/Point';
 import darkStyle from './MapStyle';
 import { HttpClient } from '@angular/common/http';
 import { CountryGroup } from '../model/CountryGroup';
 import circleToPolygon from "circle-to-polygon";
+import { MatBottomSheet } from '@angular/material';
+import { LayersBottomSheetComponent } from '../layers-bottom-sheet/layers-bottom-sheet/layers-bottom-sheet.component';
 
 // call this to Disable
 function disableScroll() {
@@ -22,6 +23,11 @@ function enableScroll() {
   });
 }
 
+export interface Layer {
+  type: "monuments" | "inspect-area";
+  visible: boolean;
+}
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -29,9 +35,17 @@ function enableScroll() {
 })
 export class MapComponent {
   m_http: HttpClient;
-  m_baseUrl: string
+  m_baseUrl: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont) {
+  layers: Layer[] = [{
+    type: "inspect-area",
+    visible: false
+  }, {
+    type: "monuments",
+    visible: false
+  }];
+
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
   }
@@ -95,6 +109,12 @@ export class MapComponent {
       clickable: false,
       fillColor: feature.getProperty('color'),
       strokeWeight: 1
+    });
+  }
+
+  openLayersBottomSheet() { 
+    this._bottomSheet.open(LayersBottomSheetComponent, {
+      data: this.layers
     });
   }
 

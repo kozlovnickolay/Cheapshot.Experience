@@ -12,7 +12,7 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
-import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSpinner } from '@angular/material';
+import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSpinner } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ExploreComponent } from './explore/explore.component';
 import { MatListModule } from '@angular/material/list';
@@ -21,9 +21,12 @@ import { PlayerBottomSheet } from './player-bottom-sheet/player-bottom-sheet';
 import { MapComponent } from './map/map.component';
 import { AgmCoreModule } from '@agm/core';
 import { PicsComponent } from './pics/pics.component';
+import { RootComponent } from './root.component';
+import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet/layers-bottom-sheet.component';
 
 @NgModule({
   declarations: [
+    RootComponent,
     AppComponent,
     NavMenuComponent,
     AboutComponent,
@@ -34,20 +37,24 @@ import { PicsComponent } from './pics/pics.component';
     ExploreComponent,
     PlayerBottomSheet,
     MapComponent,
-    PicsComponent],
+    PicsComponent,
+    LayersBottomSheetComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: ByLevelComponent, pathMatch: 'full' },
-      { path: 'daily', component: DailyComponent },
-      { path: 'daily/:city', component: DailyComponent },
-      { path: 'bylevel/:city', component: ByLevelComponent },
-      { path: 'about', component: AboutComponent },
-      { path: 'explore', component: ExploreComponent },
-      { path: 'map', component: MapComponent },
-      { path: 'pics', component: PicsComponent }
+      {
+        path: '', component: AppComponent, children: [
+          { path: '', component: ByLevelComponent, pathMatch: 'full' },
+          { path: 'daily', component: DailyComponent },
+          { path: 'daily/:city', component: DailyComponent },
+          { path: 'bylevel/:city', component: ByLevelComponent },
+          { path: 'about', component: AboutComponent },
+          { path: 'explore', component: ExploreComponent },
+          { path: 'pics', component: PicsComponent }
+        ]
+      }, { path: 'map', component: MapComponent }
     ]),
     BrowserAnimationsModule,
     MatSelectModule,
@@ -55,6 +62,7 @@ import { PicsComponent } from './pics/pics.component';
     MatNativeDateModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     OverlayModule,
     MatButtonToggleModule,
     MatButtonModule,
@@ -67,7 +75,7 @@ import { PicsComponent } from './pics/pics.component';
       apiKey: ''
     })],
   providers: [],
-  bootstrap: [AppComponent],
-  entryComponents: [MatSpinner, PlayerBottomSheet]
+  bootstrap: [RootComponent],
+  entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent]
 })
 export class AppModule { }

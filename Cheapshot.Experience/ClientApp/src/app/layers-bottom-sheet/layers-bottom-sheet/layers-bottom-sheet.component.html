@@ -1,0 +1,15 @@
+<div class="ch-sheet container-main">
+    <h2>Layers</h2>
+    <div *ngFor="let layer of layers; let i = index">
+        <p *ngIf="layer.type === 'monuments'">
+            <span [class]="font.csemoji('🗽', 32)"></span>
+            <mat-checkbox [(ngModel)]="layers[1].visible" labelPosition="before"><b>Monuments:</b></mat-checkbox>
+        </p>
+        <p *ngIf="layer.type === 'inspect-area'">
+            <span [class]="font.csemoji('📡', 32)"></span>
+            <mat-checkbox [(ngModel)]="layers[0].visible" labelPosition="before"><b>Service area:</b></mat-checkbox>
+        </p>
+    </div>
+
+
+</div>

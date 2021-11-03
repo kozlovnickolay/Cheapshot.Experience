@@ -18,9 +18,11 @@ code {
 }
 
 html, body {
-  height: 100%;
   background: #343a40;
   color: lightgray;
+  /* overflow: hidden; */
+  height: 100%;
+  /* position: fixed; */
 }
 
 body {
