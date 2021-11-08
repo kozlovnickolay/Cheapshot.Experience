@@ -5,7 +5,7 @@
   </a>
 </div>
 <agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [minZoom]="3" [disableDefaultUI]="true"
-  [styles]="styles" (mapClick)="mapClick($event)">
+  [styles]="styles" (mapClick)="mapClick($event)" gestureHandling="greedy">
   <div *ngFor="let layer of layers; let i = index">
     <agm-kml-layer *ngIf="layer.type === 'monuments' && layer.visible" preserveViewport="true"
       [url]="'https://www.google.com/maps/d/kml?mid=1r4_56P0XBSdgxpoYyHXSne_LbHUwwndE&lid=RGhFDbOb-KU'">

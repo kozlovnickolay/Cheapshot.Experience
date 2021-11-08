@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { CountryGroup } from '../model/CountryGroup';
 import circleToPolygon from "circle-to-polygon";
 import { MatBottomSheet } from '@angular/material';
-import { LayersBottomSheetComponent } from '../layers-bottom-sheet/layers-bottom-sheet/layers-bottom-sheet.component';
+import { LayersBottomSheetComponent } from '../layers-bottom-sheet/layers-bottom-sheet.component';
 
 // call this to Disable
 function disableScroll() {

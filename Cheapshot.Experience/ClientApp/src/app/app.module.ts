@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -22,7 +22,8 @@ import { MapComponent } from './map/map.component';
 import { AgmCoreModule } from '@agm/core';
 import { PicsComponent } from './pics/pics.component';
 import { RootComponent } from './root.component';
-import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet/layers-bottom-sheet.component';
+import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet.component';
+import { MonumentCreatorComponent } from './monument-creator/monument-creator.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-
     PlayerBottomSheet,
     MapComponent,
     PicsComponent,
-    LayersBottomSheetComponent],
+    LayersBottomSheetComponent,
+    MonumentCreatorComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -52,7 +54,8 @@ import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-
           { path: 'bylevel/:city', component: ByLevelComponent },
           { path: 'about', component: AboutComponent },
           { path: 'explore', component: ExploreComponent },
-          { path: 'pics', component: PicsComponent }
+          { path: 'pics', component: PicsComponent },
+          { path: 'monument-creator', component: MonumentCreatorComponent }
         ]
       }, { path: 'map', component: MapComponent }
     ]),
@@ -73,7 +76,10 @@ import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-
     CommonModule,
     AgmCoreModule.forRoot({
       apiKey: ''
-    })],
+    }),
+    ReactiveFormsModule
+  ],
+
   providers: [],
   bootstrap: [RootComponent],
   entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent]

@@ -103,7 +103,7 @@ export class DailyComponent {
   }
 
   onSubmitClick() {
-    this.load(this.city.id);
+    this.load(this.city ? this.city.id : undefined);
   }
 
   clearTable() {
