@@ -2,15 +2,13 @@
   <h1>{{ title }}</h1>
 
   <mat-form-field>
-    <mat-label>Leaderboard by city</mat-label>
-    <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
-      <mat-option value="world">🌍 World</mat-option>
-      <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <mat-option *ngFor="let city of group.cities" [value]="city">
-          {{city.name}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-select>
+    <mat-label>City:</mat-label>
+    <select matNativeControl [ngModel]="city">
+      <option value="world">🌍 World</option>
+      <optgroup *ngFor="let group of countryGroups" [label]="group.name">
+        <option *ngFor="let city of group.cities" [value]="city"  (selected)="onChangeCity(city.id)">{{city.name}}</option>
+      </optgroup>
+    </select>
   </mat-form-field>
 
   <p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
