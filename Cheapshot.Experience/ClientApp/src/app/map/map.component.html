@@ -5,16 +5,28 @@
   </a>
 </div>
 <agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [minZoom]="3" [disableDefaultUI]="true"
-  [styles]="styles" (mapClick)="mapClick($event)" gestureHandling="greedy">
+  [styles]="styles" (mapClick)="onMapClick($event)" gestureHandling="greedy">
+
   <div *ngFor="let layer of layers; let i = index">
-    <agm-kml-layer *ngIf="layer.type === 'monuments' && layer.visible" preserveViewport="true"
-      [url]="'https://www.google.com/maps/d/kml?mid=1r4_56P0XBSdgxpoYyHXSne_LbHUwwndE&lid=RGhFDbOb-KU'">
-    </agm-kml-layer>
-
-    <agm-data-layer *ngIf="layer.type === 'inspect-area' && layer.visible" [geoJson]="featureCollection"
-      [style]="styleFunc">
-
+    <agm-data-layer *ngIf="layer.visible" [geoJson]="layer.geometry" [style]="styleFunc">
     </agm-data-layer>
   </div>
 
+  <agm-marker-cluster class="clusterMarker" (clusterClick)="onClusterClick()" imagePath="/assets/images/cluster">
+    <div *ngFor="let layer of layers; let i = index">
+      <div *ngIf="layer.type === 'markers' && layer.visible">
+        <agm-overlay *ngFor="let marker of layer.markers" [latitude]="marker.lat" [longitude]="marker.lng">
+          <span class="markerStars">{{ marker.difficulty }}</span>
+          <span class="marekerIcon" [class]="font.csemoji(marker.pic, 32)"></span>
+          <agm-info-window>
+            <div class="infoEmoji" [class]="font.csemoji(marker.pic, 32)"></div>
+            <div style="float: right;">
+              <div class="markerLabel">{{marker.label}}</div>
+              <div class="markerLabel">Difficulty: {{ marker.difficulty }}</div>
+            </div>
+          </agm-info-window>
+        </agm-overlay>
+      </div>
+    </div>
+  </agm-marker-cluster>
 </agm-map>

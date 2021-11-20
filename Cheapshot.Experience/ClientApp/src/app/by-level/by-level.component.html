@@ -2,11 +2,11 @@
   <h1>{{ title }}</h1>
 
   <mat-form-field>
-    <mat-label>City:</mat-label>
-    <select matNativeControl [ngModel]="city">
-      <option value="world">🌍 World</option>
+    <mat-label>Leaderboard by city</mat-label>
+    <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
+      <option selected [ngValue]="'world'">🌍 World</option>
       <optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <option *ngFor="let city of group.cities" [value]="city"  (selected)="onChangeCity(city.id)">{{city.name}}</option>
+        <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
       </optgroup>
     </select>
   </mat-form-field>

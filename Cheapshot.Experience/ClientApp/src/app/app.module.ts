@@ -24,6 +24,8 @@ import { PicsComponent } from './pics/pics.component';
 import { RootComponent } from './root.component';
 import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet.component';
 import { MonumentCreatorComponent } from './monument-creator/monument-creator.component';
+import { AgmOverlays } from "agm-overlays";
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 
 @NgModule({
   declarations: [
@@ -75,9 +77,11 @@ import { MonumentCreatorComponent } from './monument-creator/monument-creator.co
     MatSlideToggleModule,
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: ''
+      apiKey: 'AIzaSyCg4jN2Shpzzaj8Ie2Y722PUmLjuV4431s'
     }),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgmOverlays,
+    AgmJsMarkerClustererModule
   ],
 
   providers: [],

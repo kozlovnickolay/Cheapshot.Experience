@@ -57,8 +57,8 @@ export class ByLevelComponent {
     }, error => console.error(error));
   }
 
-  onChangeCity(cityId) {
-    this.setDefaultIdByName(cityId);
+  onChangeCity(city: City) {
+    this.setDefaultIdByName(city.name);
     if (this.city.id && this.city.id !== "world")
       this.title = `${this.city.name} top by level`
     else

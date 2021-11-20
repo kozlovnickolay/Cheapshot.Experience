@@ -8,6 +8,8 @@ import { CountryGroup } from '../model/CountryGroup';
 import circleToPolygon from "circle-to-polygon";
 import { MatBottomSheet } from '@angular/material';
 import { LayersBottomSheetComponent } from '../layers-bottom-sheet/layers-bottom-sheet.component';
+import { MonumentGroup } from '../model/MonumentGroup';
+import { Monument } from '../model/Monument';
 
 // call this to Disable
 function disableScroll() {
@@ -24,8 +26,21 @@ function enableScroll() {
 }
 
 export interface Layer {
-  type: "monuments" | "inspect-area";
+  name: string;
   visible: boolean;
+  type: "zones" | "markers";
+  geometry?: any;
+  markers?: marker[];
+}
+
+// just an interface for type safety.
+interface marker {
+  lat: number;
+  lng: number;
+  label: string;
+  draggable: boolean;
+  pic: string;
+  difficulty: string;
 }
 
 @Component({
@@ -36,14 +51,6 @@ export interface Layer {
 export class MapComponent {
   m_http: HttpClient;
   m_baseUrl: string;
-
-  layers: Layer[] = [{
-    type: "inspect-area",
-    visible: false
-  }, {
-    type: "monuments",
-    visible: false
-  }];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
@@ -56,6 +63,7 @@ export class MapComponent {
   async ngOnInit() {
     disableScroll();
     await this.loadCities();
+    await this.loadMonuments();
   }
 
 
@@ -63,6 +71,12 @@ export class MapComponent {
     this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
       this.createGeoJsonObj(result);
       this.zoom = 5;
+      this.layers.push({
+        name: "Service area",
+        type: "zones",
+        visible: false,
+        geometry: this.featureCollection
+      })
     }, error => console.error(error));
   }
 
@@ -94,10 +108,18 @@ export class MapComponent {
   lng = 7.809007;
   zoom: number = 5;
 
-  mapClick(evt: MouseEvent) {
-    const cheapshotUrl = this.getCheapshotLink({ lat: evt.coords.lat, lon: evt.coords.lng });
 
-    window.open(cheapshotUrl).focus();
+  isCluster = false;
+  onMapClick(evt: MouseEvent) {
+    if (!this.isCluster) {
+      const cheapshotUrl = this.getCheapshotLink({ lat: evt.coords.lat, lon: evt.coords.lng });
+      window.location.href = cheapshotUrl;
+    } else
+      this.isCluster = !this.isCluster;
+  }
+
+  onClusterClick() {
+    this.isCluster = true;
   }
 
   getCheapshotLink(point: Point) {
@@ -112,10 +134,54 @@ export class MapComponent {
     });
   }
 
-  openLayersBottomSheet() { 
+  openLayersBottomSheet() {
     this._bottomSheet.open(LayersBottomSheetComponent, {
       data: this.layers
     });
+  }
+
+
+
+  async loadMonuments() {
+    const monumentGroups = await this.m_http.get<MonumentGroup[]>(this.m_baseUrl + 'monument').toPromise();
+    monumentGroups.forEach(group => {
+      const newLayer: Layer = {
+        name: group.tag,
+        visible: true,
+        type: "markers",
+        markers: []
+      };
+
+      group.monuments.forEach(mon => {
+        const marker = this.createMonumentMarker(mon);
+        if (marker)
+          newLayer.markers.push(marker);
+      });
+
+      this.layers.push(newLayer);
+    })
+  }
+
+  layers: Layer[] = [];
+
+  createMonumentMarker(monument: Monument) {
+    var location = monument.location.match(/(-?[0-9\.]+)(?:,|, | , | ,)(-?[0-9\.]+)/);
+
+    if (location) {
+      const m: marker = {
+        pic: monument.pic,
+        label: monument.name,
+        difficulty: monument.difficulty,
+        lat: Number.parseFloat(location[1]),
+        lng: Number.parseFloat(location[2]),
+        draggable: false
+      }
+      return m;
+    } else {
+      console.error(`Неправильные координаты в ${monument.pic} ${monument.name}`);
+      return undefined;
+    }
+
   }
 
 }
