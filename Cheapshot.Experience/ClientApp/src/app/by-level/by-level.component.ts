@@ -19,6 +19,8 @@ export class ByLevelComponent {
 
   private maxXp: number;
 
+  world: City = { id: "world", name: "🌍 World" };
+
   city: City;
 
   title: string = "World top";
@@ -39,42 +41,45 @@ export class ByLevelComponent {
     this.loadCities(defaultCity);
   }
 
-  setDefaultIdByName(name: string) {
-    this.countryGroups.forEach(x => {
-      x.cities.forEach(c => {
-        if (c.name.toLowerCase() === name.toLowerCase())
-          this.city = c;
-      })
-    })
+  setCityByName(name: string) {
+    if (name !== "World")
+      this.countryGroups.forEach(x => {
+        x.cities.forEach(c => {
+          if (c.name.toLowerCase() === name.toLowerCase())
+            this.setCity(c);
+        });
+      });
+    else
+      this.setCity(this.world);
   }
 
   loadCities(defaultCity: string) {
     this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
       this.countryGroups = result;
       if (defaultCity)
-        this.setDefaultIdByName(defaultCity);
-      this.load(this.city && this.city.id ? this.city.id : undefined);
+        this.setCityByName(defaultCity);
+      this.load();
     }, error => console.error(error));
   }
 
   onChangeCity(city: City) {
-    this.setDefaultIdByName(city.name);
-    if (this.city.id && this.city.id !== "world")
-      this.title = `${this.city.name} top by level`
-    else
-      this.title = "World top by level"
-
+    this.setCity(city);
     this.players = [];
-    this.load(this.city.id);
+    this.load();
   }
 
-  load(cityId: string) {
+  setCity(city: City) {
+    this.city = city;
+    this.title = `${city.name} top by level`;
+  }
+
+  load() {
 
     let params = new HttpParams();
 
-    if (cityId && cityId !== "world")
+    if (this.city && this.city.id !== "world")
       params = new HttpParams()
-        .set("cityId", cityId);
+        .set("cityId", this.city.id);
 
     this.m_http.get<Player[]>(this.m_baseUrl + 'level', {
       params

@@ -4,7 +4,7 @@
   <mat-form-field>
     <mat-label>Leaderboard by city</mat-label>
     <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
-      <option selected [ngValue]="'world'">🌍 World</option>
+      <option selected [ngValue]="world">🌍 World</option>
       <optgroup *ngFor="let group of countryGroups" [label]="group.name">
         <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
       </optgroup>
