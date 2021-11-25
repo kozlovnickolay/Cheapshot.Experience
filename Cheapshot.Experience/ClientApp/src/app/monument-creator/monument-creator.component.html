@@ -1,0 +1,64 @@
+<div class="explore container-main">
+    <h1>Monument creator</h1>
+    <form class="example-form" [formGroup]="form">
+        <p>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Name of monument:</mat-label>
+                <input matInput placeholder="Name" [(ngModel)]="value.name" required formControlName="name">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Pic of monument:</mat-label>
+                <input matInput placeholder="Emoji" [(ngModel)]="value.pic" required formControlName="pic">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>City of monument:</mat-label>
+                <input matInput placeholder="City" [(ngModel)]="value.city" required formControlName="city">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Location of monument:</mat-label>
+                <input matInput placeholder="Coordinates" [(ngModel)]="value.location" formControlName="location"
+                    required>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="fill">
+                <mat-label>Difficulty:</mat-label>
+                <select matNativeControl required [(ngModel)]="value.difficulty" name="value.difficulty"
+                    formControlName="difficulty">
+                    <option [ngValue]=1>⭐️</option>
+                    <option [ngValue]=2>⭐️⭐️</option>
+                    <option [ngValue]=3>⭐️⭐️⭐️</option>
+                    <option [ngValue]=4>⭐️⭐️⭐️⭐️</option>
+                    <option [ngValue]=5>⭐️⭐️⭐️⭐️⭐️</option>
+                </select>
+            </mat-form-field>
+        </p>
+
+        <div *ngIf="monument">
+            <h1><span [class]="font.csemoji(monument.building.pic, 32)"></span> {{ monument.building.name}}</h1>
+
+            <p>hp: {{ monument.building.hp}}</p>
+            <p>hpph: {{ monument.building.hpph}}</p>
+            <p>respawn: {{ monument.respawn}}</p>
+            <p>location: {{ monument.location}}</p>
+
+            <br />
+            <div *ngFor="let u of monument.upgrades">
+                <div *ngIf="isDefender(u)">
+                    <span [class]="font.csemoji(u.pic , 16)"></span><span> {{u.name}} level:{{u.level}} count: {{u.count}}</span>
+                </div>
+            </div>
+
+
+        </div>
+
+        <button type="submit" mat-raised-button (click)="onCreateClick()">Create monument</button>
+
+    </form>
+</div>
