@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cheapshot.Experience", "Che
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cheapshot.Exprience.Data", "Cheapshot.Exprience.Data\Cheapshot.Exprience.Data.csproj", "{97EAE615-36C5-42C1-AF5C-9F74ABA2E162}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheapshot.Inspector", "Cheapshot.Inspector\Cheapshot.Inspector.csproj", "{FDB47A40-F7A9-49F2-9455-C833C2DCE086}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cheapshot.Inspector", "Cheapshot.Inspector\Cheapshot.Inspector.csproj", "{FDB47A40-F7A9-49F2-9455-C833C2DCE086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

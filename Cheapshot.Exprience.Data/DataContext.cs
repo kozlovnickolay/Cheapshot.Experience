@@ -11,7 +11,7 @@ namespace Cheapshot.Exprience.Data {
         public DbSet<CityEntity> Cities { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<ExperienceEntity> Eperiences { get; set; }
-
+        public DbSet<MonumentEntity> Monuments { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) {
         }

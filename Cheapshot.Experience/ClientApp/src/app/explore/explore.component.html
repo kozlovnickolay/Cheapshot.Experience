@@ -1,0 +1,15 @@
+<div class="explore container-main">
+  <h1>Cheapshot Cities</h1>
+  <p>See what's happening around the world now:</p>
+
+  <div *ngFor="let country of countryGroups">
+    <p class="country-title">{{ country.name }}</p>
+    <div *ngFor="let city of country.cities">
+      <span>{{ city.name }}</span>
+      <a [routerLink]="['/daily', city.name]"> daily </a>
+      <a *ngFor="let point of city.points; let i = index" [attr.href]="getCheapshotLink(point)">
+        #{{ i+1 }}
+      </a>
+    </div>
+  </div>
+</div>

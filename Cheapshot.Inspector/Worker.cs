@@ -26,7 +26,6 @@ namespace Cheapshot.Inspector {
             m_logger = logger;
             m_inspectService = new InspectService();
             InspectCollection = new List<InspectCollection>();
-
         }
 
         public void GetNewData(object state) {
@@ -35,7 +34,7 @@ namespace Cheapshot.Inspector {
             var etalonEnd = new TimeSpan(19, 5, 0);
 
             if (utcNow > etalonStart && utcNow < etalonEnd) {
-                m_logger.LogInformation($"Начало загрузки статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!"); ;
+                m_logger.LogInformation($"Начало загрузки статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!");
                 using (var scope = m_scopeFactory.CreateScope()) {
                     var start = DateTime.UtcNow;
                     var dc = scope.ServiceProvider.GetService<IWorkerContext>();
@@ -51,15 +50,14 @@ namespace Cheapshot.Inspector {
 
                 }
             } else
-                m_logger.LogInformation($"Неподходящее время сбора статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!"); ;
+                m_logger.LogInformation($"Неподходящее время сбора статистики в {utcNow.Hours}:{utcNow.Minutes} UTC!");
 
         }
-
 
         public Task StartAsync(CancellationToken cancellationToken) {
             m_logger.LogInformation("Timed Background Service is starting.");
 
-            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(3600));
+            m_timer = new Timer(GetNewData, null, TimeSpan.Zero, TimeSpan.FromSeconds(600));
 
             return Task.CompletedTask;
         }
@@ -122,7 +120,8 @@ namespace Cheapshot.Inspector {
                                 Level = user.Level,
                                 Name = user.Name,
                                 UserId = user.UserId,
-                                UserPic = user.Userpic
+                                UserPic = user.Userpic,
+                                Visible = true
                             });
                             newUsersCount++;
                         }
@@ -138,7 +137,7 @@ namespace Cheapshot.Inspector {
         private void InsertExperience(IWorkerContext dc) {
             var users = dc.GetAllUsers().ToList();
             var updateExperience = new List<ExperienceEntity>();
-            var today = new DateTime(2021, 4, 11).Date;
+            var today = DateTime.UtcNow.Date;
 
             foreach (var collection in InspectCollection) {
                 foreach (var user in collection.Users) {

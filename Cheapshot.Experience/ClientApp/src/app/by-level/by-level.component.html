@@ -1,0 +1,36 @@
+<div class="container-main">
+  <h1>{{ title }}</h1>
+
+  <mat-form-field>
+    <mat-label>Leaderboard by city</mat-label>
+    <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
+      <option selected [ngValue]="'world'">🌍 World</option>
+      <optgroup *ngFor="let group of countryGroups" [label]="group.name">
+        <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
+      </optgroup>
+    </select>
+  </mat-form-field>
+
+  <p *ngIf="players.length === 0"><em>Loading leaderboard...</em></p>
+</div>
+
+<div class="lvl-top">
+  <div class="cp-container">
+    <div id="users-cp-container">
+      <div id="users">
+        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)"
+          (click)="openPlayerBottomSheet(player)">
+          <div class="cp-col index">{{ i + 1 }}</div>
+          <div class="cp-col userpic emoji">
+            <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>
+          </div>
+          <div class="cp-col info">{{ player.name }}</div>
+          <div class="cp-col rating">
+            <span class="xp">{{ player.xp | thousandSuff : 2 }}</span>
+            <span class="level">{{ player.level }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
