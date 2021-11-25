@@ -23,7 +23,6 @@ import { AgmCoreModule } from '@agm/core';
 import { PicsComponent } from './pics/pics.component';
 import { RootComponent } from './root.component';
 import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet.component';
-import { MonumentCreatorComponent } from './monument-creator/monument-creator.component';
 import { AgmOverlays } from "agm-overlays";
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 
@@ -41,8 +40,8 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
     PlayerBottomSheet,
     MapComponent,
     PicsComponent,
-    LayersBottomSheetComponent,
-    MonumentCreatorComponent],
+    LayersBottomSheetComponent
+    ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -56,8 +55,7 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
           { path: 'bylevel/:city', component: ByLevelComponent },
           { path: 'about', component: AboutComponent },
           { path: 'explore', component: ExploreComponent },
-          { path: 'pics', component: PicsComponent },
-          { path: 'monument-creator', component: MonumentCreatorComponent }
+          { path: 'pics', component: PicsComponent }
         ]
       }, { path: 'map', component: MapComponent }
     ]),
@@ -77,7 +75,7 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
     MatSlideToggleModule,
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCg4jN2Shpzzaj8Ie2Y722PUmLjuV4431s'
+      apiKey: ''
     }),
     ReactiveFormsModule,
     AgmOverlays,
