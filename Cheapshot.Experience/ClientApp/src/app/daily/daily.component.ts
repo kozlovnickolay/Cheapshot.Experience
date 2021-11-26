@@ -1,13 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CheapshotFont } from '../fonts/CheapshotFont';
 import { Player } from '../model/Player';
 import { CountryGroup } from '../model/CountryGroup';
-import { UiService } from '../ui.service';
 import { DailyType } from './DailyType';
 import { DatePipe } from '@angular/common';
-import { DateAdapter, MatBottomSheet, MAT_DATE_LOCALE } from '@angular/material';
-import { PlayerBottomSheet } from '../player-bottom-sheet/player-bottom-sheet';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { City } from '../model/City';
 
@@ -23,7 +20,9 @@ export class DailyComponent {
   public players: Player[] = [];
   public countryGroups: CountryGroup[] = [];
 
-  private maxXp: number;
+  world: City = { id: "world", name: "🌍 World" };
+
+  maxXp: number;
 
   private sub: any;
 
@@ -33,7 +32,6 @@ export class DailyComponent {
 
   m_http: HttpClient;
   m_baseUrl: string;
-  m_ui: UiService;
 
   minDate: Date;
   maxDate: Date;
@@ -43,19 +41,12 @@ export class DailyComponent {
   title: string;
   reportPeriood: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private ui: UiService, private _adapter: DateAdapter<any>, public font: CheapshotFont, private _bottomSheet: MatBottomSheet, private route: ActivatedRoute) {
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private _adapter: DateAdapter<any>, private route: ActivatedRoute) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
-    this.m_ui = ui;
-
     this._adapter.setLocale('ru');
   }
 
-  //async ngOnInit() {
-  //await this.loadCities();
-  //  await this.loadDates();
-  //  this.onChangeDailyType();
-  //}
 
   async ngOnInit() {
     await this.loadDates();
@@ -97,9 +88,14 @@ export class DailyComponent {
 
   }
 
-  onChangeCity() {
-    console.log(this.city);
+  onChangeCity(city: City) {
+    this.setCity(city);
+    this.players = [];
     this.load(this.city.id);
+  }
+
+  setCity(city: City) {
+    this.city = city;
   }
 
   onSubmitClick() {
@@ -146,8 +142,6 @@ export class DailyComponent {
   }
 
   load(cityId: string) {
-    this.ui.spin$.next(true);
-
     let params = new HttpParams()
       .set("startDate", this.getIsoDateString(this.startDate))
       .set("endDate", this.getIsoDateString(this.endDate));
@@ -161,7 +155,6 @@ export class DailyComponent {
       this.clearTable();
       this.players = result;
       result.length > 0 ? this.maxXp = result[0].xp : 0;
-      this.ui.spin$.next(false);
     }, error => console.error(error));
 
   }
@@ -173,19 +166,7 @@ export class DailyComponent {
     return Math.round((Math.sqrt(xp) / Math.sqrt(this.maxXp)) * 100);
   }
 
-  getUserRowStyle(xp: number) {
-    const percent = this.getTopPercent(xp);
-    const background = 'linear-gradient(to right, hsl(195, 100%, ' + (25 + Math.round(percent / 3)) + '%) ' + percent + '%, #00000038 ' + percent + '%)';
-    const borderBottom = '1px solid #343a40';
-    return {
-      background,
-      borderBottom
-    };
-  }
-
-  openPlayerBottomSheet(player: Player): void {
-    this._bottomSheet.open(PlayerBottomSheet, {
-      data: player
-    });
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

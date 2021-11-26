@@ -1,27 +1,25 @@
 <div class="container-main">
 
-  <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
-    <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
-    <mat-button-toggle [value]="1">Week</mat-button-toggle>
-    <mat-button-toggle [value]="2">Month</mat-button-toggle>
-    <mat-button-toggle [value]="3">Custom</mat-button-toggle>
-  </mat-button-toggle-group>
-
+  <div>
+    <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
+      <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
+      <mat-button-toggle [value]="1">Week</mat-button-toggle>
+      <mat-button-toggle [value]="2">Month</mat-button-toggle>
+      <mat-button-toggle [value]="3">Custom</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
   <h1>{{ title }}</h1>
   <h4>{{ reportPeriood }}</h4>
 
-
   <mat-form-field>
     <mat-label>Leaderboard by city</mat-label>
-    <mat-select placeholder="Leaderboard by city" [(ngModel)]="city" (selectionChange)="onChangeCity()">
-      <mat-option value="world">🌍 World</mat-option>
-      <mat-optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <mat-option *ngFor="let city of group.cities" [value]="city">
-          {{city.name}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-select>
+    <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
+      <option selected [ngValue]="world">🌍 World</option>
+      <optgroup *ngFor="let group of countryGroups" [label]="group.name">
+        <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
+      </optgroup>
+    </select>
   </mat-form-field>
 
   <div *ngIf="dailyType === 3 && minDate && maxDate">
@@ -44,25 +42,14 @@
 
 </div>
 
-<p *ngIf="players.length === 0"><em>No data for this period...</em></p>
-
-<div class="lvl-top">
-  <div class="cp-container">
-    <div id="users-cp-container">
-      <div id="users">
-        <div *ngFor="let player of players; let i = index" class="cp-row user" [ngStyle]="getUserRowStyle(player.xp)"
-          (click)="openPlayerBottomSheet(player)">
-          <div class="cp-col index">{{ i + 1 }}</div>
-          <div class="cp-col userpic emoji">
-            <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>
-          </div>
-          <div class="cp-col info">{{ player.name }}</div>
-          <div class="cp-col rating">
-            <span class="xp">{{ player.xp | thousandSuff : 2 }}</span>
-            <span class="level">{{ player.level }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+<div *ngIf="players.length === 0">
+  <div class="loading loading02">
+    <span class="cs-emoji cs-emoji-64 _1f438"></span>
+    <span class="cs-emoji cs-emoji-64 _1f430"></span>
+    <span class="cs-emoji cs-emoji-64 _1f437"></span>
+    <span class="cs-emoji cs-emoji-64 _1f47b"></span>
+    <span class="cs-emoji cs-emoji-64 _1f916"></span>
   </div>
 </div>
+
+<app-leaderboard [maxXp]="maxXp" [players]="players"></app-leaderboard>

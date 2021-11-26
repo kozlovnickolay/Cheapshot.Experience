@@ -4,20 +4,21 @@
     <img src="https://cheapshot.co/fonts/128/_1f50d-7f980c3f.png" alt="Слои">
   </a>
 </div>
-<agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [minZoom]="3" [disableDefaultUI]="true"
-  [styles]="styles" (mapClick)="onMapClick($event)" gestureHandling="greedy">
+<agm-map #AgmMap class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [minZoom]="3" [disableDefaultUI]="true"
+  [styles]="styles" (mapDblClick)="onMapClick($event)" gestureHandling="greedy" [restriction]="restriction"
+  [clickableIcons]="false" [disableDoubleClickZoom]="true" [fitBounds]="true">
 
   <div *ngFor="let layer of layers; let i = index">
     <agm-data-layer *ngIf="layer.visible" [geoJson]="layer.geometry" [style]="styleFunc">
     </agm-data-layer>
   </div>
 
-  <agm-marker-cluster class="clusterMarker" (clusterClick)="onClusterClick()" imagePath="/assets/images/cluster">
+  <agm-marker-cluster class="clusterMarker" (clusterClick)="onClusterClick()" imagePath="/assets/images/cluster/⏺">
     <div *ngFor="let layer of layers; let i = index">
       <div *ngIf="layer.type === 'markers' && layer.visible">
         <agm-overlay *ngFor="let marker of layer.markers" [latitude]="marker.lat" [longitude]="marker.lng">
           <span class="markerStars">{{ marker.difficulty }}</span>
-          <span class="marekerIcon" [class]="font.csemoji(marker.pic, 32)"></span>
+          <span [class]="font.csemoji(marker.pic, 32) + ' marekerIcon'"></span>
           <agm-info-window>
             <div class="infoEmoji" [class]="font.csemoji(marker.pic, 32)"></div>
             <div style="float: right;">

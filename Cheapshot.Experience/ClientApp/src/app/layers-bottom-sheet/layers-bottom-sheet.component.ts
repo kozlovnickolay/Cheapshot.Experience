@@ -1,8 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { CheapshotFont } from 'src/app/fonts/CheapshotFont';
-import { Layer } from 'src/app/map/map.component';
+import { Layer } from '../map/interfaces';
 
 @Component({
   templateUrl: './layers-bottom-sheet.component.html',

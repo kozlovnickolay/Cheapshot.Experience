@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AboutComponent } from './about/about.component';
-import { CounterComponent } from './counter/counter.component';
 import { DailyComponent } from './daily/daily.component';
 import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +24,7 @@ import { RootComponent } from './root.component';
 import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-sheet.component';
 import { AgmOverlays } from "agm-overlays";
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,6 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
     AppComponent,
     NavMenuComponent,
     AboutComponent,
-    CounterComponent,
     DailyComponent,
     ThousandSuffixesPipe,
     ByLevelComponent,
@@ -40,7 +39,8 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
     PlayerBottomSheet,
     MapComponent,
     PicsComponent,
-    LayersBottomSheetComponent
+    LayersBottomSheetComponent,
+    LeaderboardComponent
     ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

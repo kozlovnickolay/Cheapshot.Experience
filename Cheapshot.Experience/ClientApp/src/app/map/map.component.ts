@@ -1,6 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { CheapshotFont } from '../fonts/CheapshotFont';
-import { MapTypeStyle, MouseEvent } from '@agm/core';
+import { AgmMap, LatLngBoundsLiteral, MapTypeStyle, MouseEvent } from '@agm/core';
 import { Point } from '../model/Point';
 import darkStyle from './MapStyle';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,7 @@ import { MatBottomSheet } from '@angular/material';
 import { LayersBottomSheetComponent } from '../layers-bottom-sheet/layers-bottom-sheet.component';
 import { MonumentGroup } from '../model/MonumentGroup';
 import { Monument } from '../model/Monument';
+import { Layer, MonumentMarker } from './interfaces';
 
 // call this to Disable
 function disableScroll() {
@@ -24,25 +25,6 @@ function enableScroll() {
     event.preventDefault();
   });
 }
-
-export interface Layer {
-  name: string;
-  visible: boolean;
-  type: "zones" | "markers";
-  geometry?: any;
-  markers?: marker[];
-}
-
-// just an interface for type safety.
-interface marker {
-  lat: number;
-  lng: number;
-  label: string;
-  draggable: boolean;
-  pic: string;
-  difficulty: string;
-}
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -52,20 +34,41 @@ export class MapComponent {
   m_http: HttpClient;
   m_baseUrl: string;
 
+  styles: MapTypeStyle[] = darkStyle;
+  lat = 51.678418;
+  lng = 7.809007;
+  zoom: number = 5;
+  restriction: {
+    latLngBounds: {
+      north: 80.0,
+      south: -80.0,
+      west: -180.0,
+      east: 180.0
+    },
+    strictBounds: true
+  }
+
+  isCluster = false;
+
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
     this.m_http = http;
     this.m_baseUrl = baseUrl;
   }
+
   public featureCollection = {
     type: "FeatureCollection",
     features: []
   };
+
   async ngOnInit() {
     disableScroll();
     await this.loadCities();
     await this.loadMonuments();
   }
 
+  ngOnDestroy() {
+    enableScroll();
+  }
 
   loadCities() {
     this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
@@ -97,19 +100,6 @@ export class MapComponent {
     });
   }
 
-
-
-  ngOnDestroy() {
-    enableScroll();
-  }
-
-  public styles: MapTypeStyle[] = darkStyle
-  lat = 51.678418;
-  lng = 7.809007;
-  zoom: number = 5;
-
-
-  isCluster = false;
   onMapClick(evt: MouseEvent) {
     if (!this.isCluster) {
       const cheapshotUrl = this.getCheapshotLink({ lat: evt.coords.lat, lon: evt.coords.lng });
@@ -140,8 +130,6 @@ export class MapComponent {
     });
   }
 
-
-
   async loadMonuments() {
     const monumentGroups = await this.m_http.get<MonumentGroup[]>(this.m_baseUrl + 'monument').toPromise();
     monumentGroups.forEach(group => {
@@ -153,7 +141,7 @@ export class MapComponent {
       };
 
       group.monuments.forEach(mon => {
-        const marker = this.createMonumentMarker(mon);
+        const marker = this.createMonumentMarker(mon, group.tag);
         if (marker)
           newLayer.markers.push(marker);
       });
@@ -164,24 +152,21 @@ export class MapComponent {
 
   layers: Layer[] = [];
 
-  createMonumentMarker(monument: Monument) {
+  createMonumentMarker(monument: Monument, generation: string): MonumentMarker {
     var location = monument.location.match(/(-?[0-9\.]+)(?:,|, | , | ,)(-?[0-9\.]+)/);
 
     if (location) {
-      const m: marker = {
-        pic: monument.pic,
+      return {
+        ...monument,
         label: monument.name,
-        difficulty: monument.difficulty,
         lat: Number.parseFloat(location[1]),
         lng: Number.parseFloat(location[2]),
-        draggable: false
-      }
-      return m;
+        generation
+      };
     } else {
       console.error(`Неправильные координаты в ${monument.pic} ${monument.name}`);
       return undefined;
     }
-
   }
-
+ 
 }
