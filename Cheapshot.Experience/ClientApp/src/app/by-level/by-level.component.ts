@@ -23,6 +23,8 @@ export class ByLevelComponent {
 
   title: string = "World top";
 
+  loading = true;
+
   m_http: HttpClient;
   m_baseUrl: string
 
@@ -72,7 +74,7 @@ export class ByLevelComponent {
   }
 
   load() {
-
+    this.loading = true;
     let params = new HttpParams();
 
     if (this.city && this.city.id !== "world")
@@ -84,6 +86,7 @@ export class ByLevelComponent {
     }).subscribe(result => {
       this.players = result;
       result.length > 0 ? this.maxXp = result[0].xp : 0;
+      this.loading = false;
     }, error => console.error(error));
 
   }

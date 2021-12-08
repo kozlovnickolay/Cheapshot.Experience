@@ -25,65 +25,66 @@ import { LayersBottomSheetComponent } from './layers-bottom-sheet/layers-bottom-
 import { AgmOverlays } from "agm-overlays";
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
-  declarations: [
-    RootComponent,
-    AppComponent,
-    NavMenuComponent,
-    AboutComponent,
-    DailyComponent,
-    ThousandSuffixesPipe,
-    ByLevelComponent,
-    ExploreComponent,
-    PlayerBottomSheet,
-    MapComponent,
-    PicsComponent,
-    LayersBottomSheetComponent,
-    LeaderboardComponent
+    declarations: [
+        RootComponent,
+        AppComponent,
+        NavMenuComponent,
+        AboutComponent,
+        DailyComponent,
+        ThousandSuffixesPipe,
+        ByLevelComponent,
+        ExploreComponent,
+        PlayerBottomSheet,
+        MapComponent,
+        PicsComponent,
+        LayersBottomSheetComponent,
+        LeaderboardComponent,
+        LoadingComponent
     ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      {
-        path: '', component: AppComponent, children: [
-          { path: '', component: ByLevelComponent, pathMatch: 'full' },
-          { path: 'daily', component: DailyComponent },
-          { path: 'daily/:city', component: DailyComponent },
-          { path: 'bylevel/:city', component: ByLevelComponent },
-          { path: 'about', component: AboutComponent },
-          { path: 'explore', component: ExploreComponent },
-          { path: 'pics', component: PicsComponent }
-        ]
-      }, { path: 'map', component: MapComponent }
-    ]),
-    BrowserAnimationsModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
-    OverlayModule,
-    MatButtonToggleModule,
-    MatButtonModule,
-    MatListModule,
-    MatSidenavModule,
-    MatBottomSheetModule,
-    MatSlideToggleModule,
-    CommonModule,
-    AgmCoreModule.forRoot({
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+        HttpClientModule,
+        FormsModule,
+        RouterModule.forRoot([
+            {
+                path: '', component: AppComponent, children: [
+                    { path: '', component: ByLevelComponent, pathMatch: 'full' },
+                    { path: 'daily', component: DailyComponent },
+                    { path: 'daily/:city', component: DailyComponent },
+                    { path: 'bylevel/:city', component: ByLevelComponent },
+                    { path: 'about', component: AboutComponent },
+                    { path: 'explore', component: ExploreComponent },
+                    { path: 'pics', component: PicsComponent }]
+            }, { path: 'map', component: MapComponent }
+        ]),
+        BrowserAnimationsModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatCheckboxModule,
+        OverlayModule,
+        MatButtonToggleModule,
+        MatButtonModule,
+        MatListModule,
+        MatSidenavModule,
+        MatBottomSheetModule,
+        MatSlideToggleModule,
+        CommonModule,
+        AgmCoreModule.forRoot({
+        }),
+        ReactiveFormsModule,
+        AgmOverlays,
+        AgmJsMarkerClustererModule
+    ],
       apiKey: ''
-    }),
-    ReactiveFormsModule,
-    AgmOverlays,
-    AgmJsMarkerClustererModule
-  ],
 
-  providers: [],
-  bootstrap: [RootComponent],
-  entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent]
+    providers: [],
+    bootstrap: [RootComponent],
+    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent]
 })
 export class AppModule { }

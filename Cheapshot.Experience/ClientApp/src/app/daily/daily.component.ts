@@ -33,6 +33,8 @@ export class DailyComponent {
   m_http: HttpClient;
   m_baseUrl: string;
 
+  loading = true;
+
   minDate: Date;
   maxDate: Date;
 
@@ -90,7 +92,7 @@ export class DailyComponent {
 
   onChangeCity(city: City) {
     this.setCity(city);
-    this.players = [];
+    this.clearTable();
     this.load(this.city.id);
   }
 
@@ -108,6 +110,7 @@ export class DailyComponent {
   }
 
   onChangeDailyType() {
+    this.players = [];
     switch (this.dailyType) {
       case DailyType.Day: {
         this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 1);
@@ -142,6 +145,7 @@ export class DailyComponent {
   }
 
   load(cityId: string) {
+    this.loading = true;
     let params = new HttpParams()
       .set("startDate", this.getIsoDateString(this.startDate))
       .set("endDate", this.getIsoDateString(this.endDate));
@@ -155,6 +159,7 @@ export class DailyComponent {
       this.clearTable();
       this.players = result;
       result.length > 0 ? this.maxXp = result[0].xp : 0;
+      this.loading = false;
     }, error => console.error(error));
 
   }

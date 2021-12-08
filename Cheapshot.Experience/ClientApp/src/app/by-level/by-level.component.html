@@ -10,16 +10,8 @@
       </optgroup>
     </select>
   </mat-form-field>
-
-  <div *ngIf="players.length === 0">
-    <div class="loading loading02">
-      <span class="cs-emoji cs-emoji-64 _1f438"></span>
-      <span class="cs-emoji cs-emoji-64 _1f430"></span>
-      <span class="cs-emoji cs-emoji-64 _1f437"></span>
-      <span class="cs-emoji cs-emoji-64 _1f47b"></span>
-      <span class="cs-emoji cs-emoji-64 _1f916"></span>
-    </div>
-  </div>
 </div>
 
-<app-leaderboard [maxXp]="maxXp" [players]="players"></app-leaderboard>
+<app-loading *ngIf="this.loading"></app-loading>
+
+<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players"></app-leaderboard>

@@ -1,4 +1,8 @@
-<div class="lvl-top">
+<div *ngIf="players.length === 0">
+    <h3 style="text-align: center;">No data for this period</h3>
+</div>
+
+<div class="lvl-top" *ngIf="players.length > 0">
     <div class="cp-container">
         <div id="users-cp-container">
             <div id="users">

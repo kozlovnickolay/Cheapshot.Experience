@@ -1,55 +1,47 @@
 <div class="container-main">
 
-  <div>
-    <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
-      <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
-      <mat-button-toggle [value]="1">Week</mat-button-toggle>
-      <mat-button-toggle [value]="2">Month</mat-button-toggle>
-      <mat-button-toggle [value]="3">Custom</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
+    <div>
+        <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
+            <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
+            <mat-button-toggle [value]="1">Week</mat-button-toggle>
+            <mat-button-toggle [value]="2">Month</mat-button-toggle>
+            <mat-button-toggle [value]="3">Custom</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
 
-  <h1>{{ title }}</h1>
-  <h4>{{ reportPeriood }}</h4>
+    <h1>{{ title }}</h1>
+    <h4>{{ reportPeriood }}</h4>
 
-  <mat-form-field>
-    <mat-label>Leaderboard by city</mat-label>
-    <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
-      <option selected [ngValue]="world">🌍 World</option>
-      <optgroup *ngFor="let group of countryGroups" [label]="group.name">
-        <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
-      </optgroup>
-    </select>
-  </mat-form-field>
-
-  <div *ngIf="dailyType === 3 && minDate && maxDate">
-    <mat-form-field class="example-full-width">
-      <input matInput [value]="startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerStart"
-        placeholder="Choose start date" [(ngModel)]="startDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-      <mat-datepicker #pickerStart></mat-datepicker>
+    <mat-form-field>
+        <mat-label>Leaderboard by city</mat-label>
+        <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
+            <option selected [ngValue]="world">🌍 World</option>
+            <optgroup *ngFor="let group of countryGroups" [label]="group.name">
+                <option *ngFor="let city of group.cities" [ngValue]="city">{{city.name}}</option>
+            </optgroup>
+        </select>
     </mat-form-field>
 
-    <mat-form-field class="example-full-width">
-      <input matInput [value]="endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerEnd"
-        placeholder="Choose end date" [(ngModel)]="endDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-      <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
+    <div *ngIf="dailyType === 3 && minDate && maxDate">
+        <mat-form-field class="example-full-width">
+            <input matInput [value]="startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerStart"
+                placeholder="Choose start date" [(ngModel)]="startDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
 
-    <button mat-raised-button (click)="onSubmitClick()">Submit</button>
-  </div>
+        <mat-form-field class="example-full-width">
+            <input matInput [value]="endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="pickerEnd"
+                placeholder="Choose end date" [(ngModel)]="endDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="onSubmitClick()">Submit</button>
+    </div>
 
 </div>
 
-<div *ngIf="players.length === 0">
-  <div class="loading loading02">
-    <span class="cs-emoji cs-emoji-64 _1f438"></span>
-    <span class="cs-emoji cs-emoji-64 _1f430"></span>
-    <span class="cs-emoji cs-emoji-64 _1f437"></span>
-    <span class="cs-emoji cs-emoji-64 _1f47b"></span>
-    <span class="cs-emoji cs-emoji-64 _1f916"></span>
-  </div>
-</div>
+<app-loading *ngIf="this.loading"></app-loading>
 
-<app-leaderboard [maxXp]="maxXp" [players]="players"></app-leaderboard>
+<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players"></app-leaderboard>

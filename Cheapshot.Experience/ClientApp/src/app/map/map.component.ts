@@ -38,15 +38,17 @@ export class MapComponent {
   lat = 51.678418;
   lng = 7.809007;
   zoom: number = 5;
-  restriction: {
+  
+  /** view port restrictions */ 
+  mapRestriction = {
     latLngBounds: {
-      north: 80.0,
-      south: -80.0,
-      west: -180.0,
-      east: 180.0
+      east: 180,
+      north: 85,
+      south: -85,
+      west: -180
     },
     strictBounds: true
-  }
+  };
 
   isCluster = false;
 
@@ -168,5 +170,5 @@ export class MapComponent {
       return undefined;
     }
   }
- 
+
 }
