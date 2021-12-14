@@ -1,33 +1,27 @@
 <app-nav-menu></app-nav-menu>
 <div class="layers">
-  <a title="Слои" (click)="openLayersBottomSheet()">
-    <img src="https://cheapshot.co/fonts/128/_1f50d-7f980c3f.png" alt="Слои">
-  </a>
+    <a title="Слои" (click)="openLayersBottomSheet()">
+        <img src="https://cheapshot.co/fonts/128/_1f50d-7f980c3f.png" alt="Слои">
+    </a>
 </div>
-<agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true"
-  [styles]="styles" (mapDblClick)="onMapClick($event)" gestureHandling="greedy" [restriction]="mapRestriction"
-  [clickableIcons]="false" [disableDoubleClickZoom]="true" >
+<agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true" [styles]="styles"
+    (mapDblClick)="onMapClick($event)" gestureHandling="greedy" [restriction]="mapRestriction" [clickableIcons]="false"
+    [disableDoubleClickZoom]="true">
 
-  <div *ngFor="let layer of layers; let i = index">
-    <agm-data-layer *ngIf="layer.visible" [geoJson]="layer.geometry" [style]="styleFunc">
-    </agm-data-layer>
-  </div>
-
-  <agm-marker-cluster class="clusterMarker" (clusterClick)="onClusterClick()" imagePath="/assets/images/cluster/⏺">
     <div *ngFor="let layer of layers; let i = index">
-      <div *ngIf="layer.type === 'markers' && layer.visible">
-        <agm-overlay *ngFor="let marker of layer.markers" [latitude]="marker.lat" [longitude]="marker.lng">
-          <span class="markerStars">{{ marker.difficulty }}</span>
-          <span [class]="font.csemoji(marker.pic, 32) + ' marekerIcon'"></span>
-          <agm-info-window>
-            <div class="infoEmoji" [class]="font.csemoji(marker.pic, 32)"></div>
-            <div style="float: right;">
-              <div class="markerLabel">{{marker.label}}</div>
-              <div class="markerLabel">Difficulty: {{ marker.difficulty }}</div>
-            </div>
-          </agm-info-window>
-        </agm-overlay>
-      </div>
+        <agm-data-layer *ngIf="layer.visible" [geoJson]="layer.geometry" [style]="styleFunc">
+        </agm-data-layer>
     </div>
-  </agm-marker-cluster>
+
+    <agm-marker-cluster class="clusterMarker" (clusterClick)="onClusterClick()" imagePath="/assets/images/cluster/⏺">
+        <div *ngFor="let layer of layers; let i = index">
+            <div *ngIf="layer.type === 'markers' && layer.visible">
+                <agm-overlay *ngFor="let marker of layer.markers" [latitude]="marker.lat" [longitude]="marker.lng"
+                    (markerClick)="onMarkerClick(marker)">
+                    <span class="markerStars">{{ marker.difficulty }}</span>
+                    <span [class]="font.csemoji(marker.pic, 32) + ' marekerIcon'"></span>
+                </agm-overlay>
+            </div>
+        </div>
+    </agm-marker-cluster>
 </agm-map>

@@ -1,11 +1,17 @@
-<div class="ch-sheet container-main">
-    <h2>Layers</h2>
-    <p><span [class]="font.csemoji('🗽', 32)"></span> Monuments:</p>
+<div class="ch-sheet container-main font">
+    <h2 class="title">Layers</h2>
+    <p><span [class]="font.csemoji('🗽', 32)"></span> <b class="layer-title">Monuments:</b></p>
     <div *ngFor="let layer of layers; let i = index">
-            <mat-checkbox *ngIf="layer.type === 'markers'" [(ngModel)]="layer.visible" labelPosition="before"><b>{{layer.name}}</b></mat-checkbox>
+        <mat-checkbox *ngIf="layer.type === 'markers'" [(ngModel)]="layer.visible" labelPosition="after">
+            <b>{{layer.name}}</b>
+            <span class="count">{{ layer.markers.length}}</span>
+        </mat-checkbox>
     </div>
-    <p><span [class]="font.csemoji('📡', 32)"></span> Zones:</p>
+    <p><span [class]="font.csemoji('📡', 32)"></span> <b class="layer-title">Zones:</b></p>
     <div *ngFor="let layer of layers; let i = index">
-            <mat-checkbox *ngIf="layer.type === 'zones'" [(ngModel)]="layer.visible" labelPosition="before"><b>{{layer.name}}</b></mat-checkbox>
+        <mat-checkbox *ngIf="layer.type === 'zones'" [(ngModel)]="layer.visible" labelPosition="after">
+            <b>{{layer.name}}</b>
+            <span class="count">{{ layer.geometry.features.length}}</span>
+        </mat-checkbox>
     </div>
 </div>

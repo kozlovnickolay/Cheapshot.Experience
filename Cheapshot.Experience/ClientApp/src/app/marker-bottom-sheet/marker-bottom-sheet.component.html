@@ -1,0 +1,10 @@
+<div class="info-block">
+    <div [class]="font.csemoji(marker.pic, 64) + ' info-emoji'"></div>
+    <div class="info-text">
+        <div class="info-label">{{marker.label}}</div>
+        <div class="info-label">Difficulty: {{marker.difficulty }}</div>
+    </div>
+</div>
+
+<button mat-raised-button (click)="onOpeninGameClick()">Open in Cheapshot</button>
+<button mat-raised-button (click)="onShareClick()">Share</button>

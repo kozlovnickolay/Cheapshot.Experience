@@ -11,7 +11,7 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
-import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSpinner } from '@angular/material';
+import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSpinner } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ExploreComponent } from './explore/explore.component';
 import { MatListModule } from '@angular/material/list';
@@ -26,6 +26,7 @@ import { AgmOverlays } from "agm-overlays";
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { LoadingComponent } from './loading/loading.component';
+import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-sheet.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { LoadingComponent } from './loading/loading.component';
         PicsComponent,
         LayersBottomSheetComponent,
         LeaderboardComponent,
-        LoadingComponent
+        LoadingComponent,
+        MarkerBottomSheetComponent        
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -73,6 +75,7 @@ import { LoadingComponent } from './loading/loading.component';
         MatListModule,
         MatSidenavModule,
         MatBottomSheetModule,
+        MatSnackBarModule,
         MatSlideToggleModule,
         CommonModule,
         AgmCoreModule.forRoot({
@@ -81,10 +84,9 @@ import { LoadingComponent } from './loading/loading.component';
         AgmOverlays,
         AgmJsMarkerClustererModule
     ],
-      apiKey: ''
 
     providers: [],
     bootstrap: [RootComponent],
-    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent]
+    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent]
 })
 export class AppModule { }
