@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
-import { MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSpinner } from '@angular/material';
+import { GestureConfig, MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCardContent, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSpinner } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ExploreComponent } from './explore/explore.component';
 import { MatListModule } from '@angular/material/list';
@@ -27,6 +27,8 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { LoadingComponent } from './loading/loading.component';
 import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-sheet.component';
+import { ToolsComponent } from './tools/tools.component';
+import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calculator.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +46,9 @@ import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-
         LayersBottomSheetComponent,
         LeaderboardComponent,
         LoadingComponent,
-        MarkerBottomSheetComponent        
+        MarkerBottomSheetComponent,
+        ToolsComponent,
+        EnvelopCalculatorComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -59,7 +63,8 @@ import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-
                     { path: 'bylevel/:city', component: ByLevelComponent },
                     { path: 'about', component: AboutComponent },
                     { path: 'explore', component: ExploreComponent },
-                    { path: 'pics', component: PicsComponent }]
+                    { path: 'pics', component: PicsComponent },
+                    { path: 'tools', component: ToolsComponent }]
             }, { path: 'map', component: MapComponent }
         ]),
         BrowserAnimationsModule,
@@ -82,11 +87,13 @@ import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-
         }),
         ReactiveFormsModule,
         AgmOverlays,
-        AgmJsMarkerClustererModule
+        AgmJsMarkerClustererModule,
+        MatSliderModule,
+        MatCardModule
     ],
 
-    providers: [],
+    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
     bootstrap: [RootComponent],
-    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent]
+    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent]
 })
 export class AppModule { }

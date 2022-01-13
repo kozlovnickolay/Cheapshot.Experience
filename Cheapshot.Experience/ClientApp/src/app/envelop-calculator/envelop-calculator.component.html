@@ -1,0 +1,23 @@
+<div class="container-main">
+
+    <h1>Envelop calculator</h1>
+
+
+    <p>Selected level: <span class="level">{{ this.value }}</span></p>
+    <!-- <button  mat-mini-fab (click)="onRemoveClick()"><span [class]="font.csemoji('➖', 16)"></span></button> -->
+    <mat-slider  class="example-margin" [disabled]="disabled" [invert]="invert" [max]="max" [min]="min" [step]="step"
+        [thumbLabel]="thumbLabel" [(ngModel)]="value" [vertical]="vertical" (input)="onChangeLevel($event)" [color]="color">
+    </mat-slider>
+    <!-- <button  mat-mini-fab (click)="onAddClick()"><span [class]="font.csemoji('➕', 16)"></span></button> -->
+
+    <mat-card class="result">
+        <mat-card-content class="info-block">
+            <div [class]="font.csemoji('🧧', 48) + ' info-emoji'"></div>
+            <div class="info-text">
+                <div class="info-label">1 Gift envelope</div>
+                <div class="info-label">{{ money | thousandSuff : 2 }} <span [class]="font.csemoji('💰', 16)"></span> inside</div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div>

@@ -4,4 +4,5 @@ export interface Player {
     level: number;
     xp: number;
     cities: string;
+    levelCount: number;
 }

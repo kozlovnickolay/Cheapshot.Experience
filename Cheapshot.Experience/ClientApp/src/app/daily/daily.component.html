@@ -44,4 +44,10 @@
 
 <app-loading *ngIf="this.loading"></app-loading>
 
-<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players"></app-leaderboard>
+<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players.slice(0, 1000)"></app-leaderboard>
+
+<button class="all-button" *ngIf="!this.loading && players.length > 1000 && !this.showAll" mat-raised-button
+    (click)="onShowAllClick()">Show all</button>
+
+<app-leaderboard *ngIf="!this.loading && this.showAll" [maxXp]="maxXp" [players]="players.slice(1000)"
+    [firstPlayer]="1001"></app-leaderboard>

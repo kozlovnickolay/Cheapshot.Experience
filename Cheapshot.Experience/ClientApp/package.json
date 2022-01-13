@@ -33,6 +33,7 @@
     "circle-to-polygon": "^2.2.0",
     "core-js": "^3.3.3",
     "google-maps": "^4.3.3",
+    "hammerjs": "^2.0.8",
     "jquery": "3.4.1",
     "node-sass": "^4.12.0",
     "oidc-client": "^1.9.1",

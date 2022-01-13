@@ -7,95 +7,96 @@ import { City } from '../model/City';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-by-level',
-  templateUrl: './by-level.component.html',
-  styleUrls: ['./by-level.component.css']
+	selector: 'app-by-level',
+	templateUrl: './by-level.component.html',
+	styleUrls: ['./by-level.component.css']
 })
 export class ByLevelComponent {
-  public players: Player[] = [];
-  public countryGroups: CountryGroup[] = [];
+	public players: Player[] = [];
+	public countryGroups: CountryGroup[] = [];
 
-  maxXp: number;
+	maxXp: number;
 
-  world: City = { id: "world", name: "🌍 World" };
+	world: City = { id: "world", name: "🌍 World" };
 
-  city: City;
+	city: City;
 
-  title: string = "World top";
+	title: string = "World top";
 
-  loading = true;
+	loading = true;
 
-  m_http: HttpClient;
-  m_baseUrl: string
+	m_http: HttpClient;
+	m_baseUrl: string
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private route: ActivatedRoute) {
-    this.m_http = http;
-    this.m_baseUrl = baseUrl;
-  }
+	constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private route: ActivatedRoute) {
+		this.m_http = http;
+		this.m_baseUrl = baseUrl;
+	}
 
-  async ngOnInit() {
-    let defaultCity;
-    this.sub = this.route.params.subscribe(params => {
-      defaultCity = params['city'];
-    });
-    this.loadCities(defaultCity);
-  }
+	async ngOnInit() {
+		let defaultCity;
+		this.sub = this.route.params.subscribe(params => {
+			defaultCity = params['city'];
+		});
+		this.loadCities(defaultCity);
+	}
 
-  setCityByName(name: string) {
-    if (name !== "World")
-      this.countryGroups.forEach(x => {
-        x.cities.forEach(c => {
-          if (c.name.toLowerCase() === name.toLowerCase())
-            this.setCity(c);
-        });
-      });
-    else
-      this.setCity(this.world);
-  }
+	setCityByName(name: string) {
+		if (name !== "World")
+			this.countryGroups.forEach(x => {
+				x.cities.forEach(c => {
+					if (c.name.toLowerCase() === name.toLowerCase())
+						this.setCity(c);
+				});
+			});
+		else
+			this.setCity(this.world);
+	}
 
-  loadCities(defaultCity: string) {
-    this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
-      this.countryGroups = result;
-      if (defaultCity)
-        this.setCityByName(defaultCity);
-      this.load();
-    }, error => console.error(error));
-  }
+	loadCities(defaultCity: string) {
+		this.m_http.get<CountryGroup[]>(this.m_baseUrl + 'city').subscribe(result => {
+			this.countryGroups = result;
+			if (defaultCity)
+				this.setCityByName(defaultCity);
+			this.load();
+		}, error => console.error(error));
+	}
 
-  onChangeCity(city: City) {
-    this.setCity(city);
-    this.players = [];
-    this.load();
-  }
+	onChangeCity(city: City) {
+		this.setCity(city);
+		this.players = [];
+		this.load();
+	}
 
-  setCity(city: City) {
-    this.city = city;
-    this.title = `${city.name} top by level`;
-  }
+	setCity(city: City) {
+		this.city = city;
+		this.title = `${city.name} top by level`;
+	}
 
-  load() {
-    this.loading = true;
-    let params = new HttpParams();
+	load() {
+		if (!this.loading)
+			this.loading = true;
+		let params = new HttpParams();
 
-    if (this.city && this.city.id !== "world")
-      params = new HttpParams()
-        .set("cityId", this.city.id);
+		if (this.city && this.city.id !== "world")
+			params = new HttpParams()
+				.set("cityId", this.city.id);
 
-    this.m_http.get<Player[]>(this.m_baseUrl + 'level', {
-      params
-    }).subscribe(result => {
-      this.players = result;
-      result.length > 0 ? this.maxXp = result[0].xp : 0;
-      this.loading = false;
-    }, error => console.error(error));
+		this.m_http.get<Player[]>(this.m_baseUrl + 'level', {
+			params
+		}).subscribe(result => {
+			this.players = result;
+			result.length > 0 ? this.maxXp = result[0].xp : 0;
+			this.loading = false;
+		}, error => console.error(error));
 
-  }
+	}
 
-  private sub: any;
+	private sub: any;
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+	ngOnDestroy() {
+		this.sub.unsubscribe();
+	}
 
 
 }

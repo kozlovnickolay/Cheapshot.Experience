@@ -145,7 +145,8 @@ namespace Cheapshot.Inspector {
                         CityId = collection.CityId,
                         Date = today,
                         UserId = users.Single(x => x.UserId == user.UserId).Id,
-                        Xp = user.Xp
+                        Xp = user.Xp,
+                        Level = user.Level
                     });
                 }
             }

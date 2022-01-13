@@ -52,7 +52,7 @@ namespace Cheapshot.Experience.Services {
                     Pic = x.User.UserPic,
                     Name = x.User.Name,
                     Id = x.UserId,
-                    Level = x.User.Level,
+                    Level = x.Level.HasValue ? x.Level.Value : x.User.Level,
                     Xp = x.Xp,
                     City = $"{ x.City.Flag} {x.City.Name}"
                 })
@@ -82,7 +82,7 @@ namespace Cheapshot.Experience.Services {
             public string Pic { get; set; }
             public string Name { get; set; }
             public Guid Id { get; set; }
-            public int Level { get; set; }
+            public short Level { get; set; }
             public long Xp { get; set; }
             public string City { get; set; }
         }
@@ -121,6 +121,8 @@ namespace Cheapshot.Experience.Services {
 
                 if (startEntry != null && startEntry.Xp != endResult.Xp) {
                     endResult.Xp = endResult.Xp - startEntry.Xp;
+                    if (endResult.Level != null && startEntry.Level != null)
+                        endResult.LevelCount = endResult.Level.Value - startEntry.Level.Value;
                     diff.Add(endResult);
                 }
 

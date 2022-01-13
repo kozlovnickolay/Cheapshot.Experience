@@ -1,3 +1,9 @@
 html {
   touch-action: manipulation;
 }
+
+.all-button {
+  margin: 5px;
+  position: relative;
+  left: 50%;
+}

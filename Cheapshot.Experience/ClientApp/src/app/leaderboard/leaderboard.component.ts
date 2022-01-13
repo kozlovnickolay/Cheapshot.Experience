@@ -16,6 +16,9 @@ export class LeaderboardComponent implements OnInit {
   @Input()
   maxXp: number;
 
+  @Input()
+  firstPlayer: number;
+
   constructor(
     public font: CheapshotFont,
     private _bottomSheet: MatBottomSheet,
@@ -42,6 +45,11 @@ export class LeaderboardComponent implements OnInit {
     this._bottomSheet.open(PlayerBottomSheet, {
       data: player
     });
+  }
+
+  getIndex(i: number) {
+    const first = this.firstPlayer ? this.firstPlayer : 1;
+    return i + first;
   }
 
 }

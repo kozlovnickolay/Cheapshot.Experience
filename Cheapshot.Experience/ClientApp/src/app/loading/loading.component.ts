@@ -11,7 +11,11 @@ export class LoadingComponent implements OnInit {
 
 	constructor(public font: CheapshotFont) { }
 
+	pics: string[] = [];
+
 	ngOnInit() {
+		for (let i = 0; i < 5; i++)
+			this.pics.push(this.getRandomPic());
 	}
 
 	getRandomPic() {

@@ -8,7 +8,7 @@
             <div id="users">
                 <div *ngFor="let player of players; let i = index" class="cp-row user"
                     [ngStyle]="getUserRowStyle(player.xp)" (click)="openPlayerBottomSheet(player)">
-                    <div class="cp-col index">{{ i + 1 }}</div>
+                    <div class="cp-col index">{{ getIndex(i) }}</div>
                     <div class="cp-col userpic emoji">
                         <span [class]="font.csemoji(player.pic, 32)">{{player.pic}}</span>
                     </div>
@@ -16,6 +16,9 @@
                     <div class="cp-col rating">
                         <span class="xp">{{ player.xp | thousandSuff : 2 }}</span>
                         <span class="level">{{ player.level }}</span>
+                    </div>
+                    <div *ngIf="player.levelCount" class="cp-col rating">
+                        <span class="level-up">+{{ player.levelCount }}</span>
                     </div>
                 </div>
             </div>

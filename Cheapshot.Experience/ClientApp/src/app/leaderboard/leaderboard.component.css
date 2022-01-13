@@ -86,19 +86,12 @@ a {
   }
   .cp-col.info {
     font-size: 20px;
-    flex-grow: 2;
-    
+    flex-grow: 2; 
     display: flex;
     flex-direction: column;
-  
     word-break: break-all;
   }
-  /* .cp-col.info .username {
-    word-break: keep-all;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  } */
-  
+ 
   .cp-col.info .buildings {
     display: flex;
     flex-direction: row;
@@ -124,4 +117,10 @@ a {
     padding: 1px 8px;
     border-radius: 16px;
     background-color: #0281FC;
+  }
+
+  .cp-col.rating .level-up {
+    padding: 1px 6px;
+    border-radius: 16px;
+    background-color: #28a745;
   }
