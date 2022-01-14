@@ -29,6 +29,7 @@ import { LoadingComponent } from './loading/loading.component';
 import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-sheet.component';
 import { ToolsComponent } from './tools/tools.component';
 import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calculator.component';
+import { BuildingCalculatorComponent } from './building-calculator/building-calculator.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calcula
         LoadingComponent,
         MarkerBottomSheetComponent,
         ToolsComponent,
-        EnvelopCalculatorComponent
+        EnvelopCalculatorComponent,
+        BuildingCalculatorComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -94,6 +96,6 @@ import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calcula
 
     providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
     bootstrap: [RootComponent],
-    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent]
+    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent, BuildingCalculatorComponent]
 })
 export class AppModule { }

@@ -3,8 +3,18 @@
     <h1>Tools</h1>
 
     <ul>
-        <li> <button mat-raised-button (click)="onEnvelopCalculatorClick()"><span
-                    [class]="font.csemoji('🧧', 16)"></span> Envelope calculator</button></li>
+        <li>
+            <button mat-raised-button (click)="onEnvelopCalculatorClick()">
+                <span [class]="font.csemoji('🧧', 32)"></span>
+                <span class="button-tool">Envelopes calculator</span>
+            </button>
+        </li>
+        <li>
+            <button mat-raised-button (click)="onBuildingCalculatorClick()">
+                <span [class]="font.csemoji('🏰', 32)"></span>
+                <span class="button-tool">Building calculator</span>
+            </button>
+        </li>
     </ul>
 
 </div>

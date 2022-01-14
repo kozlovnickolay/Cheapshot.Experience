@@ -1,0 +1,45 @@
+<div class="container-main">
+
+    <h3>Building calculator</h3>
+
+    <mat-list>
+
+        <mat-list-item class="info-block">
+            <mat-slider class="example-margin" [disabled]="disabled" [invert]="invert" [max]="fromMax" [min]="fromMin"
+                [step]="step" [thumbLabel]="thumbLabel" [(ngModel)]="fromValue" [vertical]="vertical"
+                (input)="onChangeFromLevel($event)" [color]="color">
+            </mat-slider>
+        </mat-list-item>
+        <mat-divider class="divider"></mat-divider>
+
+        <mat-list-item class="info-block">
+            <div class="info-text">
+                <div class="info-label">
+                    <span [class]="font.csemoji(fromPic, 32) "></span>
+                    <span class="level">{{ fromValue }}</span>
+                    <span style="margin: 0px 5px;">to</span>
+                    <span [class]="font.csemoji(toPic, 32) "></span>
+                    <span class="level">{{ toValue }}</span>
+                </div>
+                <div class="info-label">Costs: {{ total | thousandSuff : 2 }} <span
+                        [class]="font.csemoji('💰', 32)"></span> </div>
+            </div>
+        </mat-list-item>
+        <mat-divider class="divider"></mat-divider>
+
+        <mat-list-item class="info-block">
+            <mat-slider class="example-margin" [disabled]="disabled" [invert]="invert" [max]="toMax" [min]="toMin"
+                [step]="step" [thumbLabel]="thumbLabel" [(ngModel)]="toValue" [vertical]="vertical"
+                (input)="onChangeToLevel($event)" [color]="color">
+            </mat-slider>
+        </mat-list-item>
+
+        <mat-divider *ngIf="toValue > 179" class="divider"></mat-divider>
+
+        <mat-list-item *ngIf="toValue > 179" class="warn">
+            <p>Unconfirmed information, figures may not be accurate</p>
+        </mat-list-item>
+
+    </mat-list>
+
+</div>
