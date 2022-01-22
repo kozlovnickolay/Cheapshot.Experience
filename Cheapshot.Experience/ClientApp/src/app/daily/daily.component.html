@@ -1,18 +1,34 @@
 <div class="container-main">
 
-    <div>
+    <div style="text-align: center;">
+
         <mat-button-toggle-group [(ngModel)]="dailyType" (change)="onChangeDailyType()">
             <mat-button-toggle checked [value]="0">Day</mat-button-toggle>
             <mat-button-toggle [value]="1">Week</mat-button-toggle>
             <mat-button-toggle [value]="2">Month</mat-button-toggle>
             <mat-button-toggle [value]="3">Custom</mat-button-toggle>
         </mat-button-toggle-group>
+
+        <h1>{{ title }}</h1>
+
+        <button style="display: block; float: left;" *ngIf="dailyType !== 3" mat-icon-button
+            [disabled]="loading || startDate === minDate" (click)="onShiftClick()">
+            <mat-icon>navigate_before</mat-icon>
+        </button>
+
+        <button style="display: block; float: right;" *ngIf="dailyType !== 3" mat-icon-button
+            [disabled]="loading || endDate === maxDate" (click)="onShiftClick(true)">
+            <mat-icon>navigate_next</mat-icon>
+        </button>
+
+        <div class="period" *ngIf="dailyType !== 3">
+            <span>
+                {{reportPeriood ? reportPeriood : 'loading...'}}
+            </span>
+        </div>
     </div>
 
-    <h1>{{ title }}</h1>
-    <h4>{{ reportPeriood }}</h4>
-
-    <mat-form-field>
+    <mat-form-field style="width: 100%;">
         <mat-label>Leaderboard by city</mat-label>
         <select matNativeControl [ngModel]="city" (ngModelChange)="onChangeCity($event)">
             <option selected [ngValue]="world">🌍 World</option>
@@ -44,7 +60,7 @@
 
 <app-loading *ngIf="this.loading"></app-loading>
 
-<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players.slice(0, 1000)"></app-leaderboard>
+<app-leaderboard *ngIf="!this.loading" [maxXp]="maxXp" [players]="players.slice(0, 1000)" [periodEnd]="endDate" [periodStart]="startDate"></app-leaderboard>
 
 <button class="all-button" *ngIf="!this.loading && players.length > 1000 && !this.showAll" mat-raised-button
     (click)="onShowAllClick()">Show all</button>

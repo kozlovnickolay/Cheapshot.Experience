@@ -13,15 +13,6 @@ namespace Cheapshot.Experience.Services {
             m_exp = exp;
         }
 
-        Top MapFromSearch(SearchResults s) {
-            return new Top {
-                Level = s.Level,
-                Name = s.Name,
-                Pic = s.Pic,
-                Xp = s.Xp,
-                UserId = s.Id
-            };
-        }
         public IEnumerable<Top> GetTopPlayersByCityId(Guid cityId) {
             IQueryable<ExperienceEntity> top;
             var maxDate = m_exp.GetAll().Max(x => x.Date);
@@ -43,54 +34,80 @@ namespace Cheapshot.Experience.Services {
                 return DateTime.UtcNow.Date;
         }
 
-
-
-
         IEnumerable<Top> GetTopFromSearch(IQueryable<ExperienceEntity> search) {
-            var result = search
-                .Select(x => new SearchResults {
+            return search
+                .Select(x => new Top {
                     Pic = x.User.UserPic,
                     Name = x.User.Name,
-                    Id = x.UserId,
-                    Level = x.Level.HasValue ? x.Level.Value : x.User.Level,
+                    Level = x.Level,
                     Xp = x.Xp,
-                    City = $"{ x.City.Flag} {x.City.Name}"
+                    UserId = x.UserId
                 })
-                .ToList();
-
-            var grouped = result
-                .GroupBy(x => new { x.Id, x.City })
-                .Select(x => new {
-                    x.Key.Id,
-                    x.Key.City,
-                    entry = MapFromSearch(x.OrderByDescending(x => x.Xp).First())
-                })
-                .OrderBy(x => x.City)
-                .GroupBy(x => x.Id)
-                .Select(x => AddCitiesToResultEntry(
-                    x.Select(y => y.entry).First(),
-                    string.Join(", ", x.Select(y => y.City).OrderBy(o => o))
-                    ))
+                .Distinct()
+                .ToList()
                 .OrderByDescending(x => x.Xp);
-            //.Take(1000);
-            return grouped;
         }
 
+        public string[] GetCitiesByUserId(Guid userId) {
+            var endDate = m_exp.GetAll().Max(x => x.Date);
 
+            var cities = m_exp.GetCitiesByUserId(endDate, userId);
 
-        private class SearchResults {
-            public string Pic { get; set; }
-            public string Name { get; set; }
-            public Guid Id { get; set; }
-            public short Level { get; set; }
-            public long Xp { get; set; }
-            public string City { get; set; }
+            return cities
+                .Select(x => x.City)
+                .OrderBy(x => x.Country)
+                .OrderBy(x => x.Name)
+                .Select(x => $"{ x.Flag} {x.Name}")
+                .Distinct()
+                .ToArray();
+        }
+        public Chart GetPeriodChart(Guid userId, DateTime min, DateTime max) {
+
+            var query = m_exp.GetChart(min, max, userId)
+                .Select(x => new {
+                    Date = x.Date,
+                    Level = x.Level,
+                    Name = x.User.Name,
+                    Pic = x.User.UserPic,
+                    Xp = x.Xp
+                })
+            .OrderBy(x => x.Date)
+            .Distinct()
+            .ToList();
+
+            var days = query.GroupBy(x => new { x.Name, x.Pic })
+            .Select(x => new {
+                x.Key.Pic,
+                x.Key.Name,
+                Values = x.Select(y => new {
+                    y.Date,
+                    y.Level,
+                    y.Xp
+                }).ToArray()
+            })
+            .First();
+
+            var chart = new Chart {
+                Name = days.Name,
+                Pic = days.Pic,
+                Labels = new string[days.Values.Length-1],
+                Levels = new int[days.Values.Length-1],
+                Series = new long[days.Values.Length-1]
+            };
+
+            int i = 1;
+
+            foreach (var day in days.Values) {
+                if (i < days.Values.Length) {
+                    chart.Labels[i - 1] = day.Date.AddDays(1).ToShortDateString();
+                    chart.Levels[i - 1] = day.Level;
+                    chart.Series[i - 1] = days.Values[i].Xp - day.Xp;
+                }
+                i++;
+            }
+            return chart;
         }
 
-        Top AddCitiesToResultEntry(Top e, string c) {
-            e.Cities = c;
-            return e;
-        }
 
         public IEnumerable<Top> GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate) {
             IQueryable<ExperienceEntity> endTop;
@@ -121,8 +138,7 @@ namespace Cheapshot.Experience.Services {
 
                 if (startEntry != null && startEntry.Xp != endResult.Xp) {
                     endResult.Xp = endResult.Xp - startEntry.Xp;
-                    if (endResult.Level != null && startEntry.Level != null)
-                        endResult.LevelCount = endResult.Level.Value - startEntry.Level.Value;
+                    endResult.LevelCount = endResult.Level - startEntry.Level;
                     diff.Add(endResult);
                 }
 
@@ -130,7 +146,6 @@ namespace Cheapshot.Experience.Services {
             return diff.OrderByDescending(x => x.Xp);
 
         }
-
 
     }
 }

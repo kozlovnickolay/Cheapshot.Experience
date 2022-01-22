@@ -13,20 +13,27 @@ namespace Cheapshot.Experience.Controllers {
     public class CityController : ControllerBase {
 
         private readonly ILogger<CityController> _logger;
-        private readonly ICityService m_service;
+        private readonly ICityService m_cityService;
+        private readonly ITopService m_topService;
 
 
-        public CityController(ILogger<CityController> logger, ICityService service) {
+        public CityController(ILogger<CityController> logger, ICityService cityService, ITopService topService) {
             _logger = logger;
-            m_service = service;
+            m_cityService = cityService;
+            m_topService = topService;
         }
 
         [HttpGet]
         public object Get(string country) {
             if (string.IsNullOrEmpty(country))
-                return m_service.GetAllCountries();
+                return m_cityService.GetAllCountries();
             else
-                return m_service.GetCitiesByCountry(country);
+                return m_cityService.GetCitiesByCountry(country);
+        }
+
+        [HttpGet("user/{userId}")]
+        public object GetUserCities(Guid userId) {
+            return m_topService.GetCitiesByUserId(userId);
         }
     }
 }

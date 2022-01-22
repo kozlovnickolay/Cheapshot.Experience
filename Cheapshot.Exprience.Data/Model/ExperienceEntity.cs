@@ -15,6 +15,6 @@ namespace Cheapshot.Exprience.Data.Model {
         public Guid CityId { get; set; }
         public CityEntity City { get; set; }
         [Column("level")]
-        public short? Level { get; set; }
+        public short Level { get; set; }
     }
 }

@@ -23,16 +23,16 @@
 
 .level {
     margin-left: 4px;
-    padding: 1px 8px;
+    padding: 1px 12px;
     border-radius: 16px;
     background-color: #0281FC;
+    vertical-align: top;
 }
 
 .info-emoji {
     display: inline-block;
     vertical-align: middle;
     margin: 24px;
-    float: left;
 }
 
 .info-text {

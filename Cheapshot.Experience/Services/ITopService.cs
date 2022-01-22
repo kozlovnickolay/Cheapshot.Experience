@@ -9,5 +9,10 @@ namespace Cheapshot.Experience.Services {
         IEnumerable<Top> GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate);
 
         DateTime GetMaxMinDate(string type);
+
+        string[] GetCitiesByUserId(Guid userId);
+
+        Chart GetPeriodChart(Guid userId, DateTime min, DateTime max);
+
     }
 }

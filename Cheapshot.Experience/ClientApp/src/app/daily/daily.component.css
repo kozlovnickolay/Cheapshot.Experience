@@ -7,3 +7,14 @@ html {
   position: relative;
   left: 50%;
 }
+
+button {
+  margin: 0px 3px;
+}
+
+.period {
+  font-weight: bold;
+  font-size: 18px;
+  vertical-align: middle;
+  margin-top: 7px;
+}

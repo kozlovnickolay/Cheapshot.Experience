@@ -21,5 +21,10 @@ namespace Cheapshot.Experience.Controllers {
         public object Get(Guid cityId) {
             return m_service.GetTopPlayersByCityId(cityId);
         }
+
+        [HttpGet("chart/{userId}/{min}/{max}")]
+        public object GetChart(Guid userId, DateTime min, DateTime max) {
+            return m_service.GetPeriodChart(userId, min, max);
+        }
     }
 }

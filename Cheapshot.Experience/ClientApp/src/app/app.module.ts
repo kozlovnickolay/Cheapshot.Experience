@@ -11,7 +11,7 @@ import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
-import { GestureConfig, MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCardContent, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSpinner } from '@angular/material';
+import { GestureConfig, MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCardContent, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatIconModule, MatInputModule, MatNativeDateModule, MatProgressSpinnerModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSpinner } from '@angular/material';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ExploreComponent } from './explore/explore.component';
 import { MatListModule } from '@angular/material/list';
@@ -30,6 +30,8 @@ import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-
 import { ToolsComponent } from './tools/tools.component';
 import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calculator.component';
 import { BuildingCalculatorComponent } from './building-calculator/building-calculator.component';
+import { DurationPipePipe } from './custom-pipes/duration-pipe.pipe';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -50,8 +52,8 @@ import { BuildingCalculatorComponent } from './building-calculator/building-calc
         MarkerBottomSheetComponent,
         ToolsComponent,
         EnvelopCalculatorComponent,
-        BuildingCalculatorComponent
-    ],
+        BuildingCalculatorComponent,
+        DurationPipePipe],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
@@ -91,10 +93,12 @@ import { BuildingCalculatorComponent } from './building-calculator/building-calc
         AgmOverlays,
         AgmJsMarkerClustererModule,
         MatSliderModule,
-        MatCardModule
+        MatCardModule,
+        MatIconModule,
+        ChartsModule
     ],
 
-    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
+    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }, ThemeService],
     bootstrap: [RootComponent],
     entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent, BuildingCalculatorComponent]
 })

@@ -35,13 +35,16 @@
             </div>
         </mat-list-item>
         <mat-divider class="divider"></mat-divider>
-        <mat-list-item class="info-block">
+        <mat-list-item style="height: auto;" class="info-block">
             <div [class]="font.csemoji('💰', 48) + ' info-emoji'"></div>
             <div class="info-text">
                 <div *ngIf="this.value < 200" class="info-label">1B costs:</div>
-                <div *ngIf="this.value > 200" class="info-label">1T costs:</div>
-                <div class="info-label">{{ rubles | currency: 'RUB':'symbol-narrow' }} | {{ euro | currency: 'EUR':'€ &
-                    $' }}</div>
+                <div *ngIf="this.value >= 200" class="info-label">1T costs:</div>
+                <ul *ngFor="let cost of costs; let i = index" class="info-label">
+                    <li>
+                        {{ cost.value | currency: cost.isoName:'symbol-narrow' }}
+                    </li>
+                </ul>
             </div>
         </mat-list-item>
     </mat-list>

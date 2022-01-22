@@ -10,16 +10,27 @@ namespace Cheapshot.Exprience.Data.Repository {
 
         public IQueryable<ExperienceEntity> GetTopExperience(DateTime date) {
             return GetAll()
-                .Include(x => x.City)
                 .Include(x => x.User)
                 .Where(d => d.Date == date && d.User.Visible == true);
         }
 
         public IQueryable<ExperienceEntity> GetTopExperience(DateTime date, Guid cityId) {
             return GetAll()
-                .Include(x => x.City)
                 .Include(x => x.User)
                 .Where(d => d.Date == date && d.CityId == cityId && d.User.Visible == true);
         }
+
+        public IQueryable<ExperienceEntity> GetCitiesByUserId(DateTime date, Guid userId) {
+            return GetAll()
+                .Include(x => x.City)
+                .Where(d => d.Date == date && d.UserId == userId);
+        }
+
+        public IQueryable<ExperienceEntity> GetChart(DateTime min,DateTime max,  Guid userId) {
+            return GetAll()
+                .Include(x => x.User)
+                .Where(d => d.Date >= min &&  d.Date <= max && d.UserId == userId);
+        }
+
     }
 }

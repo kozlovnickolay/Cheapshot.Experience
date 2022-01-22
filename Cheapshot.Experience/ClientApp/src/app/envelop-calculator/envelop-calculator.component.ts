@@ -3,7 +3,10 @@ import { CheapshotFont } from '../fonts/CheapshotFont';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { MatSliderChange } from '@angular/material';
 
-
+interface Currency {
+	value: number;
+	isoName: string;
+}
 @Component({
 	templateUrl: './envelop-calculator.component.html',
 	styleUrls: ['./envelop-calculator.component.css']
@@ -13,6 +16,25 @@ export class EnvelopCalculatorComponent implements OnInit {
 	constructor(public font: CheapshotFont) { }
 
 	ngOnInit() {
+		this.costs.push({
+			value: this.getCostOf1B(this.base, this.costBase.rub),
+			isoName: 'RUB'
+		}, {
+			value: this.getCostOf1B(this.base, this.costBase.eur),
+			isoName: 'EUR'
+		}, {
+			value: this.getCostOf1B(this.base, this.costBase.usd),
+			isoName: 'USD'
+		}, {
+			value: this.getCostOf1B(this.base, this.costBase.sek),
+			isoName: 'SEK'
+		}, {
+			value: this.getCostOf1B(this.base, this.costBase.uah),
+			isoName: 'UAH'
+		}, {
+			value: this.getCostOf1B(this.base, this.costBase.gpb),
+			isoName: 'GBP'
+		})
 	}
 
 	autoTicks = false;
@@ -31,18 +53,19 @@ export class EnvelopCalculatorComponent implements OnInit {
 
 
 	money = 750000;
-	rubles = 66555.55;
-	dollar = 722.11;
-	euro = 722.11;
-	hryvnia = 20044;
+
+	costs: Currency[] = [];
 
 	base = 750000;
+
 	costBase = {
-		rubles: 5990,
-		dollar: 54.99,
-		euro: 64.99,
-		hryvnia: 1803.96
-	}
+		rub: 5990,
+		usd: 79.99,
+		eur: 64.99,
+		uah: 1803.96,
+		sek: 695,
+		gpb: 54.99
+	};
 
 	onAddClick = () => this.value++;
 	onRemoveClick = () => this.value--;
@@ -54,11 +77,29 @@ export class EnvelopCalculatorComponent implements OnInit {
 			this.editValue = false;
 
 		this.value = event.value;
-		this.money = this.base * Math.pow(1.05, event.value - 1)
-		this.rubles = event.value < 200 ? this.getCostOf1B(this.money, this.costBase.rubles) : this.getCostOf1T(this.money, this.costBase.rubles);
-		this.hryvnia = event.value < 200 ? this.getCostOf1B(this.money, this.costBase.hryvnia) : this.getCostOf1T(this.money, this.costBase.hryvnia);
-		this.dollar = event.value < 200 ? this.getCostOf1B(this.money, this.costBase.dollar) : this.getCostOf1T(this.money, this.costBase.dollar);
-		this.euro = event.value < 200 ? this.getCostOf1B(this.money, this.costBase.euro) : this.getCostOf1T(this.money, this.costBase.euro);
+		this.money = this.base * Math.pow(1.05, event.value - 1);
+
+		this.costs = [];
+
+		this.costs.push({
+			value: event.value < 200 ? this.getCostOf1B(this.money, this.costBase.rub) : this.getCostOf1T(this.money, this.costBase.rub),
+			isoName: 'RUB'
+		}, {
+			value: event.value < 200 ? this.getCostOf1B(this.money, this.costBase.eur) : this.getCostOf1T(this.money, this.costBase.eur),
+			isoName: 'EUR'
+		}, {
+			value: event.value < 200 ? this.getCostOf1B(this.money, this.costBase.usd) : this.getCostOf1T(this.money, this.costBase.usd),
+			isoName: 'USD'
+		}, {
+			value:event.value < 200 ? this.getCostOf1B(this.money, this.costBase.sek) : this.getCostOf1T(this.money, this.costBase.sek),
+			isoName: 'SEK'
+		}, {
+			value: event.value < 200 ? this.getCostOf1B(this.money, this.costBase.uah) : this.getCostOf1T(this.money, this.costBase.uah),
+			isoName: 'UAH'
+		}, {
+			value: event.value < 200 ? this.getCostOf1B(this.money, this.costBase.gpb) : this.getCostOf1T(this.money, this.costBase.gpb),
+			isoName: 'GBP'
+		});
 
 	}
 

@@ -39,6 +39,11 @@
   animation-delay: 1.2s;
 }
 
+.info-block .mat-list-base .mat-list-item .mat-list-item-content {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 @keyframes loading02 {
   0% {
     filter: blur(0);

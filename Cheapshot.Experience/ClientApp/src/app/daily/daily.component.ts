@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { City } from '../model/City';
+import { getIsoDateString } from '../model/traits';
 
 @Component({
 	selector: 'app-daily-data',
@@ -42,6 +43,9 @@ export class DailyComponent {
 	endDate: Date;
 	title: string;
 	reportPeriood: string;
+
+	prevButton: string;
+	nextButton: string;
 
 	showAll = false;
 
@@ -117,37 +121,66 @@ export class DailyComponent {
 	}
 
 	onChangeDailyType() {
-		this.players = [];
+		this.clearTable();
 		switch (this.dailyType) {
 			case DailyType.Day: {
 				this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 1);
 				this.endDate = this.maxDate;
 				this.title = `Daily report`;
-				this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
 				break;
 			}
 			case DailyType.Week: {
 				this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 7);
 				this.endDate = this.maxDate;
 				this.title = `Weekly report`
-				this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
 				break;
 			}
 			case DailyType.Month: {
-				this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() - 30);
+				this.startDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth() - 1, this.maxDate.getDate());
 				this.endDate = this.maxDate;
 				this.title = `Monthly report`
-				this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
 				break;
 			}
 			case DailyType.Custom: {
 				this.startDate = this.minDate;
 				this.endDate = this.maxDate;
 				this.title = `Custom report`;
-				this.reportPeriood = ``;
 				break;
 			}
 		}
+		this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
+
+		this.load(this.city && this.city.id ? this.city.id : undefined);
+	}
+
+	onShiftClick(right: boolean = false) {
+		this.clearTable();
+		const operator = right ? -1 : 1;
+		switch (this.dailyType) {
+			case DailyType.Day: {
+				this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - 1 * operator);
+				this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 1 * operator);
+				break;
+			}
+			case DailyType.Week: {
+				this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate() - 7 * operator);
+				this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate() - 7 * operator);
+				break;
+			}
+			case DailyType.Month: {
+				this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth() - 1 * operator, this.startDate.getDate());
+				this.endDate = new Date(this.endDate.getFullYear(), this.endDate.getMonth() - 1 * operator, this.endDate.getDate());
+				break;
+			}
+		}
+
+		if (this.startDate < this.minDate)
+			this.startDate = this.minDate;
+
+		if (this.endDate >= this.maxDate)
+			this.endDate = this.maxDate;
+
+		this.reportPeriood = `${this.startDate.toLocaleDateString("ru")} - ${this.endDate.toLocaleDateString("ru")}`;
 		this.load(this.city && this.city.id ? this.city.id : undefined);
 	}
 
@@ -155,8 +188,8 @@ export class DailyComponent {
 		if (!this.loading)
 			this.loading = true;
 		let params = new HttpParams()
-			.set("startDate", this.getIsoDateString(this.startDate))
-			.set("endDate", this.getIsoDateString(this.endDate));
+			.set("startDate", getIsoDateString(this.startDate))
+			.set("endDate", getIsoDateString(this.endDate));
 
 		if (cityId && cityId !== "world")
 			params = params.append("cityId", cityId);
@@ -172,12 +205,6 @@ export class DailyComponent {
 
 	}
 
-	getIsoDateString(date: Date) {
-		return new DatePipe('en-US').transform(date, 'yyyy-MM-dd');
-	}
-	getTopPercent(xp: number) {
-		return Math.round((Math.sqrt(xp) / Math.sqrt(this.maxXp)) * 100);
-	}
 
 	ngOnDestroy() {
 		this.sub.unsubscribe();

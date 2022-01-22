@@ -12,17 +12,22 @@
         </mat-list-item>
         <mat-divider class="divider"></mat-divider>
 
-        <mat-list-item class="info-block">
+        <mat-list-item style="height: auto;" class="info-block">
             <div class="info-text">
                 <div class="info-label">
-                    <span [class]="font.csemoji(fromPic, 32) "></span>
+                    <span [class]="font.csemoji(fromPic, 64) "></span>
                     <span class="level">{{ fromValue }}</span>
                     <span style="margin: 0px 5px;">to</span>
-                    <span [class]="font.csemoji(toPic, 32) "></span>
+                    <span [class]="font.csemoji(toPic, 64) "></span>
                     <span class="level">{{ toValue }}</span>
                 </div>
-                <div class="info-label">Costs: {{ total | thousandSuff : 2 }} <span
-                        [class]="font.csemoji('💰', 32)"></span> </div>
+                <div class="info-label">Costs: {{ totalCost | thousandSuff : 2 }} <span
+                        [class]="font.csemoji('💰', 20)"></span>
+                </div>
+                <div class="info-label">Total time: {{ totalTime | durationPipe }}</div>
+                <div class="info-label">Total xp: {{ totalXp | thousandSuff : 2 }} <span
+                        [class]="font.csemoji('🎖', 20)"></span>
+                </div>
             </div>
         </mat-list-item>
         <mat-divider class="divider"></mat-divider>

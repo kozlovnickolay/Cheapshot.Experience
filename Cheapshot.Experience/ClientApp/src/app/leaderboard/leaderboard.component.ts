@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component,  Input, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material';
 import { CheapshotFont } from 'src/app/fonts/CheapshotFont';
 import { Player } from 'src/app/model/Player';
@@ -19,10 +19,15 @@ export class LeaderboardComponent implements OnInit {
   @Input()
   firstPlayer: number;
 
-  constructor(
-    public font: CheapshotFont,
-    private _bottomSheet: MatBottomSheet,
-  ) { }
+  @Input()
+  periodStart: Date;
+
+  @Input()
+  periodEnd: Date;
+
+  constructor(public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
+  }
+
 
   ngOnInit() {
   }
@@ -43,7 +48,7 @@ export class LeaderboardComponent implements OnInit {
 
   openPlayerBottomSheet(player: Player): void {
     this._bottomSheet.open(PlayerBottomSheet, {
-      data: player
+      data: { ...player, min: this.periodStart, max: this.periodEnd }
     });
   }
 

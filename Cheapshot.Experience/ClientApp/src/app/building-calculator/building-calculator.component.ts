@@ -3,6 +3,7 @@ import { MatSliderChange } from '@angular/material';
 import { CheapshotFont } from '../fonts/CheapshotFont';
 import buildings from './buildings';
 
+
 @Component({
 	templateUrl: './building-calculator.component.html',
 	styleUrls: ['./building-calculator.component.css']
@@ -13,6 +14,9 @@ export class BuildingCalculatorComponent implements OnInit {
 
 	ngOnInit() {
 	}
+
+	getTotalTime = (lvl: number) => (lvl - 1) * lvl / 2;
+	getTotalXp = (lvl: number) => (8 + 3 * (lvl - 1)) * lvl / 2;
 
 	autoTicks = false;
 	disabled = false;
@@ -34,7 +38,9 @@ export class BuildingCalculatorComponent implements OnInit {
 	toPic = buildings[1].pic;
 
 
-	total = buildings[1].total - buildings[0].total;
+	totalCost = buildings[1].total - buildings[0].total;
+	totalTime = this.getTotalTime(1) - this.getTotalTime(0);
+	totalXp = this.getTotalXp(1) - this.getTotalXp(0);
 
 	onChangeFromLevel(event: MatSliderChange) {
 		this.fromValue = event.value;
@@ -46,7 +52,10 @@ export class BuildingCalculatorComponent implements OnInit {
 
 		this.toMin = event.value + 1;
 		this.fromPic = buildings[event.value].pic;
-		this.total = buildings[this.toValue].total - buildings[event.value].total;
+		this.totalCost = buildings[this.toValue].total - buildings[event.value].total;
+
+		this.totalTime = this.getTotalTime(this.toValue) - this.getTotalTime(event.value);
+		this.totalXp = this.getTotalXp(this.toValue) - this.getTotalXp(event.value);
 	}
 
 	onChangeToLevel(event: MatSliderChange) {
@@ -59,6 +68,11 @@ export class BuildingCalculatorComponent implements OnInit {
 
 		this.fromMax = event.value - 1;
 		this.toPic = buildings[event.value].pic;
-		this.total = buildings[event.value].total - buildings[this.fromValue].total;
+		this.totalCost = buildings[event.value].total - buildings[this.fromValue].total;
+
+		this.totalTime = this.getTotalTime(event.value) - this.getTotalTime(this.fromValue);
+		this.totalXp = this.getTotalXp(event.value) - this.getTotalXp(this.fromValue);
 	}
+
+
 }
