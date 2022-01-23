@@ -12,7 +12,7 @@ namespace Cheapshot.Experience.Services {
 
         string[] GetCitiesByUserId(Guid userId);
 
-        Chart GetPeriodChart(Guid userId, DateTime min, DateTime max);
+        Chart GetPeriodChart(Guid userId, DateTime? min, DateTime? max);
 
     }
 }

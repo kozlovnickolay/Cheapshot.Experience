@@ -61,9 +61,15 @@ namespace Cheapshot.Experience.Services {
                 .Distinct()
                 .ToArray();
         }
-        public Chart GetPeriodChart(Guid userId, DateTime min, DateTime max) {
+        public Chart GetPeriodChart(Guid userId, DateTime? min, DateTime? max) {
 
-            var query = m_exp.GetChart(min, max, userId)
+            if (!min.HasValue)
+                min = m_exp.GetAll().Where(x => x.UserId == userId).Min(x => x.Date).Date;
+
+            if (!max.HasValue)
+                max = m_exp.GetAll().Where(x => x.UserId == userId).Max(x => x.Date).Date;
+
+            var query = m_exp.GetChart(min.Value, max.Value, userId)
                 .Select(x => new {
                     Date = x.Date,
                     Level = x.Level,
@@ -90,18 +96,20 @@ namespace Cheapshot.Experience.Services {
             var chart = new Chart {
                 Name = days.Name,
                 Pic = days.Pic,
-                Labels = new string[days.Values.Length-1],
-                Levels = new int[days.Values.Length-1],
-                Series = new long[days.Values.Length-1]
+                Dates = new DateTime[days.Values.Length - 1],
+                Levels = new int[days.Values.Length - 1],
+                DayValues = new long[days.Values.Length - 1],
+                Values = new long[days.Values.Length - 1]
             };
 
             int i = 1;
 
             foreach (var day in days.Values) {
                 if (i < days.Values.Length) {
-                    chart.Labels[i - 1] = day.Date.AddDays(1).ToShortDateString();
+                    chart.Dates[i - 1] = day.Date.AddDays(1);
                     chart.Levels[i - 1] = day.Level;
-                    chart.Series[i - 1] = days.Values[i].Xp - day.Xp;
+                    chart.DayValues[i - 1] = days.Values[i].Xp - day.Xp;
+                    chart.Values[i - 1] = days.Values[i].Xp;
                 }
                 i++;
             }

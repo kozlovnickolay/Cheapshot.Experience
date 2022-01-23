@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AboutComponent } from './about/about.component';
 import { DailyComponent } from './daily/daily.component';
-import { ThousandSuffixesPipe } from './custom-pipes/ThousandSuffixesPipe';
+import { ThousandSuffixesPipe } from './custom-pipes/thousand-suffixes-pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { ByLevelComponent } from './by-level/by-level.component';
@@ -30,7 +30,7 @@ import { MarkerBottomSheetComponent } from './marker-bottom-sheet/marker-bottom-
 import { ToolsComponent } from './tools/tools.component';
 import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calculator.component';
 import { BuildingCalculatorComponent } from './building-calculator/building-calculator.component';
-import { DurationPipePipe } from './custom-pipes/duration-pipe.pipe';
+import { DurationPipe } from './custom-pipes/duration-pipe';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 
 @NgModule({
@@ -53,7 +53,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
         ToolsComponent,
         EnvelopCalculatorComponent,
         BuildingCalculatorComponent,
-        DurationPipePipe],
+        DurationPipe],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
@@ -98,7 +98,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
         ChartsModule
     ],
 
-    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }, ThemeService],
+    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }, ThemeService, ThousandSuffixesPipe],
     bootstrap: [RootComponent],
     entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent, BuildingCalculatorComponent]
 })

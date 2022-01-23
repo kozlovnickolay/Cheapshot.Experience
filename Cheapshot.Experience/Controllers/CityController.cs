@@ -1,11 +1,7 @@
-﻿using Cheapshot.Experience.Model.Data;
-using Cheapshot.Experience.Services;
+﻿using Cheapshot.Experience.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Cheapshot.Experience.Controllers {
     [ApiController]

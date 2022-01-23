@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'durationPipe'
 })
-export class DurationPipePipe implements PipeTransform {
+export class DurationPipe implements PipeTransform {
 
   transform(value: number): string {
     const minutes: number = Math.floor(value / 60);

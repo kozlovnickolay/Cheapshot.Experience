@@ -1,7 +1,5 @@
 <div class="container-main">
-
-  <h1>Pics</h1>
-
-  <span *ngFor="let pic of pics; let i = index" [class]="font.csemoji(pic, 128)">{{pic}}</span>
-
+	<h1>Pics</h1>
+	<span *ngFor="let pic of pics; let i = index" [class]="font.csemoji(pic, 128)"
+		(click)="this.onPicClick(pic)">{{pic}}</span>
 </div>
