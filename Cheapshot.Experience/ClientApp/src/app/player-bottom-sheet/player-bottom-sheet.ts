@@ -116,9 +116,11 @@ export class PlayerBottomSheet implements OnInit {
 		}
 	}
 	async ngOnInit(): Promise<void> {
-		const cities = await this.m_http.get<string[]>(this.m_baseUrl + `city/user/${this.data.userId}`).toPromise();
-		this.data.cities = cities.join(", ");
-		this.changeDetectorRef.detectChanges();
+		this.m_http.get<string[]>(this.m_baseUrl + `city/user/${this.data.userId}`)
+			.subscribe(cities => {
+				this.data.cities = cities.join(", ");
+				this.changeDetectorRef.detectChanges();
+			});
 
 		if (!this.chartVisible)
 			return;
