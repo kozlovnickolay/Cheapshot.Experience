@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cheapshot.Experience.Model.Data {
+namespace Cheapshot.Exprience.Data.Model {
     public class Top {
         public string Pic { get; set; }
         public string Name { get; set; }

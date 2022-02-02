@@ -1,9 +1,5 @@
 ﻿using Cheapshot.Exprience.Data.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Cheapshot.Exprience.Data {
     public class DataContext : DbContext {
@@ -12,6 +8,8 @@ namespace Cheapshot.Exprience.Data {
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<ExperienceEntity> Eperiences { get; set; }
         public DbSet<MonumentEntity> Monuments { get; set; }
+        public DbSet<StatisticsEntity> Statistics { get; set; }
+        public DbSet<DailyCacheEntity> DailyCache { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) {
         }

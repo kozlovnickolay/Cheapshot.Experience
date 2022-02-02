@@ -25,7 +25,7 @@ namespace Cheapshot.Exprience.Data.Repository {
             m_dc.Set<TEntity>().AddRange(newEntities);
         }
 
-        public IQueryable Get(Expression<Func<TEntity, bool>> selector) {
+        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector) {
             return m_dc.Set<TEntity>().Where(selector).AsQueryable();
         }
 

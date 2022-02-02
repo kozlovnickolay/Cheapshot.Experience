@@ -16,6 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.11" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
   </ItemGroup>
@@ -35,10 +39,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Cheapshot.Exprience.Data\Cheapshot.Exprience.Data.csproj" />
     <ProjectReference Include="..\Cheapshot.Inspector\Cheapshot.Inspector.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\custom-pipes\ThousandSuffixesPipe.ts" />
   </ItemGroup>
 
   <ItemGroup>

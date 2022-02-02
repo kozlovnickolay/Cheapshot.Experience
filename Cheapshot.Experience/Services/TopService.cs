@@ -8,68 +8,65 @@ using System.Linq;
 namespace Cheapshot.Experience.Services {
     public class TopService : ITopService {
         private readonly ExperienceRepository m_exp;
+        private readonly StatisticsRepository m_stats;
+        private readonly DailyCacheRepository m_cache;
 
-        public TopService(ExperienceRepository exp) {
+        public TopService(ExperienceRepository exp, StatisticsRepository stats, DailyCacheRepository cache) {
             m_exp = exp;
+            m_stats = stats;
+            m_cache = cache;
         }
 
-        public IEnumerable<Top> GetTopPlayersByCityId(Guid cityId) {
-            IQueryable<ExperienceEntity> top;
-            var maxDate = m_exp.GetAll().Max(x => x.Date);
+        public Top[] GetTopPlayersByCityId(Guid cityId) {
 
-            if (cityId != Guid.Empty)
-                top = m_exp.GetTopExperience(maxDate, cityId);
-            else
-                top = m_exp.GetTopExperience(maxDate);
+            var maxDate = m_stats.GetMaxDate();
+            var topCache = m_cache.GetTopCache(maxDate, maxDate, cityId);
 
-            return GetTopFromSearch(top).Take(1000);
+            if (topCache != null) {
+                return topCache;
+            } else {
+                IQueryable<ExperienceEntity> topQuery;
+
+                if (cityId != Guid.Empty)
+                    topQuery = m_exp.GetTopExperience(maxDate, cityId).Take(1000);
+                else
+                    topQuery = m_exp.GetTopExperience(maxDate).Take(1000);
+
+                var top = MapEntityToTop(topQuery);
+
+                m_cache.Add(new DailyCacheEntity { CityId = cityId, From = maxDate, To = maxDate, Cache = top });
+                m_cache.SaveChanges();
+                return top;
+            }
+        }
+
+        private Top[] MapEntityToTop(IQueryable<ExperienceEntity> query) {
+            return query.Select(x => new Top {
+                Level = x.Level,
+                Name = x.User.Name,
+                UserId = x.User.Id,
+                Pic = x.User.UserPic,
+                Xp = x.Xp
+            }).ToArray();
         }
 
         public DateTime GetMaxMinDate(string type) {
             if (type == "max")
-                return m_exp.GetAll().Max(x => x.Date).Date;
+                return m_stats.GetMaxDate();
             else if (type == "min")
-                return m_exp.GetAll().Min(x => x.Date).Date;
+                return m_stats.GetMinDate();
             else
                 return DateTime.UtcNow.Date;
         }
 
-        IEnumerable<Top> GetTopFromSearch(IQueryable<ExperienceEntity> search) {
-            return search
-                .Select(x => new Top {
-                    Pic = x.User.UserPic,
-                    Name = x.User.Name,
-                    Level = x.Level,
-                    Xp = x.Xp,
-                    UserId = x.UserId
-                })
-                .Distinct()
-                .ToList()
-                .OrderByDescending(x => x.Xp);
-        }
-
         public string[] GetCitiesByUserId(Guid userId) {
-            var endDate = m_exp.GetAll().Max(x => x.Date);
-
-            var cities = m_exp.GetCitiesByUserId(endDate, userId);
-
-            return cities
-                .Select(x => x.City)
-                .OrderBy(x => x.Country)
-                .OrderBy(x => x.Name)
-                .Select(x => $"{ x.Flag} {x.Name}")
-                .Distinct()
-                .ToArray();
+            var endDate = m_stats.GetMaxDate();
+            return m_exp.GetCitiesByUserId(endDate, userId);
         }
-        public Chart GetPeriodChart(Guid userId, DateTime? min, DateTime? max) {
 
-            if (!min.HasValue)
-                min = m_exp.GetAll().Where(x => x.UserId == userId).Min(x => x.Date).Date;
+        public Chart GetPeriodChart(Guid userId, DateTime min, DateTime max) {
 
-            if (!max.HasValue)
-                max = m_exp.GetAll().Where(x => x.UserId == userId).Max(x => x.Date).Date;
-
-            var query = m_exp.GetChart(min.Value, max.Value, userId)
+            var query = m_exp.GetChart(min, max, userId)
                 .Select(x => new {
                     Date = x.Date,
                     Level = x.Level,
@@ -117,28 +114,36 @@ namespace Cheapshot.Experience.Services {
         }
 
 
-        public IEnumerable<Top> GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate) {
-            IQueryable<ExperienceEntity> endTop;
-            IQueryable<ExperienceEntity> startTop;
+        public Top[] GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate) {
 
-            if (endDate == null) {
-                endDate = m_exp.GetAll().Max(x => x.Date);
-            }
+            var topCache = m_cache.GetTopCache(startDate, endDate, cityId);
 
-            if (cityId != Guid.Empty) {
-                startTop = m_exp.GetTopExperience(startDate, cityId);
-                endTop = m_exp.GetTopExperience(endDate, cityId);
+            if (topCache != null) {
+                return topCache;
             } else {
-                startTop = m_exp.GetTopExperience(startDate);
-                endTop = m_exp.GetTopExperience(endDate);
-            }
+                IQueryable<ExperienceEntity> endTop;
+                IQueryable<ExperienceEntity> startTop;
 
-            return GetDifferenceFromTops(endTop, startTop);
+
+                if (cityId != Guid.Empty) {
+                    startTop = m_exp.GetTopExperience(startDate, cityId);
+                    endTop = m_exp.GetTopExperience(endDate, cityId);
+                } else {
+                    startTop = m_exp.GetTopExperience(startDate);
+                    endTop = m_exp.GetTopExperience(endDate);
+                }
+
+                var range = GetDifferenceFromTops(endTop, startTop);
+                m_cache.Add(new DailyCacheEntity { From = startDate, To = endDate, Cache = range, CityId = cityId });
+                m_cache.SaveChanges();
+                return range;
+            }
         }
 
-        IEnumerable<Top> GetDifferenceFromTops(IQueryable<ExperienceEntity> end, IQueryable<ExperienceEntity> start) {
-            var endResults = GetTopFromSearch(end).ToArray();
-            var startResults = GetTopFromSearch(start).ToArray();
+        Top[] GetDifferenceFromTops(IQueryable<ExperienceEntity> end, IQueryable<ExperienceEntity> start) {
+            var endResults = MapEntityToTop(end);
+            var startResults = MapEntityToTop(start);
+
             var diff = new List<Top>();
 
             foreach (var endResult in endResults) {
@@ -151,8 +156,7 @@ namespace Cheapshot.Experience.Services {
                 }
 
             }
-            return diff.OrderByDescending(x => x.Xp);
-
+            return diff.OrderByDescending(x => x.Xp).ToArray();
         }
 
     }

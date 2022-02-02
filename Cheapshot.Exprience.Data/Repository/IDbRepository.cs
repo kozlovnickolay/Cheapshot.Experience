@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Cheapshot.Exprience.Data.Repository {
     public interface IDbRepository<T> {
-        IQueryable Get(Expression<Func<T, bool>> selector);
+        IQueryable<T> Get(Expression<Func<T, bool>> selector);
         T GetById(Guid id);
         IQueryable<T> GetAll();
 

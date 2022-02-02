@@ -12,5 +12,6 @@ namespace Cheapshot.Inspector.Services.Interfaces {
         Guid InsertXpData(ExperienceEntity xp);
         void InsertRangeExperience(ExperienceEntity[] exps);
         void EqualizeExperience(DateTime date);
+        void InsertStats(StatisticsEntity stats);
     }
 }

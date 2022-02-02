@@ -9,11 +9,13 @@ namespace Cheapshot.Inspector.Services {
         private readonly CitiesRepository m_cities;
         private readonly UsersRepository m_users;
         private readonly ExperienceRepository m_exps;
+        private readonly StatisticsRepository m_stats;
 
-        public WorkerContext(CitiesRepository cities, UsersRepository users, ExperienceRepository exps) {
+        public WorkerContext(CitiesRepository cities, UsersRepository users, ExperienceRepository exps, StatisticsRepository stats) {
             m_cities = cities;
             m_users = users;
             m_exps = exps;
+            m_stats = stats;
         }
 
         public IQueryable<UserEntity> GetAllUsers() {
@@ -66,6 +68,11 @@ namespace Cheapshot.Inspector.Services {
         public void EqualizeExperience(DateTime date) {
             var stringDate = date.ToString("yyyy-MM-dd");
             m_exps.ExecuteSqlRaw($"update experience e set xp = e2.xp, \"level\" = e2.\"level\" from(select userid, MAX(xp) as xp, MAX(\"level\") as \"level\" from experience where \"date\" = '{stringDate}' group by 1) as e2 where e.\"date\" = '{stringDate}' and e.userid = e2.userid");
+        }
+
+        public void InsertStats(StatisticsEntity stats) {
+            m_stats.Add(stats);
+            m_stats.SaveChanges();
         }
     }
 }

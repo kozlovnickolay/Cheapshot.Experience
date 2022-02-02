@@ -38,6 +38,8 @@ namespace Cheapshot.Experience {
             services.AddScoped<UsersRepository>();
             services.AddScoped<ExperienceRepository>();
             services.AddScoped<MonumentsRepository>();
+            services.AddScoped<StatisticsRepository>();
+            services.AddScoped<DailyCacheRepository>();
             services.AddTransient<IMonumentService, MonumentsService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ITopService, TopService>();

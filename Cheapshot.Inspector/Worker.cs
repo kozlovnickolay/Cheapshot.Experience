@@ -44,9 +44,15 @@ namespace Cheapshot.Inspector {
                         DownloadUsersFromInspectByCity(city);
                     }
                     UpdateUsers(dc);
-                    InsertExperience(dc);
+                    var records = InsertExperience(dc);
                     Clear();
-                    m_logger.LogInformation($"Загрузка статистики выполнена за {(DateTime.UtcNow - start).TotalSeconds} секунд!"); ;
+                    var time = (DateTime.UtcNow - start).TotalSeconds;
+                    dc.InsertStats(new StatisticsEntity {
+                        Date = DateTime.UtcNow.Date,
+                        Records = records,
+                        Time = time
+                    });
+                    m_logger.LogInformation($"Загрузка статистики выполнена за {time} секунд!");
 
                 }
             } else
@@ -134,7 +140,7 @@ namespace Cheapshot.Inspector {
             m_logger.LogInformation($"Обновлено {updateUsersCount} игроков");
         }
 
-        private void InsertExperience(IWorkerContext dc) {
+        private int InsertExperience(IWorkerContext dc) {
             var users = dc.GetAllUsers().ToList();
             var updateExperience = new List<ExperienceEntity>();
             var today = DateTime.UtcNow.Date;
@@ -156,6 +162,7 @@ namespace Cheapshot.Inspector {
             dc.EqualizeExperience(today);
 
             m_logger.LogInformation($"Добавлено {updateExperience.Count} новых записей опыта");
+            return updateExperience.Count;
         }
 
         private void Clear() {

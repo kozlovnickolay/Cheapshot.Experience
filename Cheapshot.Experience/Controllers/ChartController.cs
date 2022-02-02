@@ -19,7 +19,7 @@ namespace Cheapshot.Experience.Controllers {
 
 
         [HttpGet]
-        public object GetChart(Guid userId, DateTime? startDate, DateTime? endDate) {
+        public object GetChart(Guid userId, DateTime startDate, DateTime endDate) {
             return m_service.GetPeriodChart(userId, startDate, endDate);
         }
     }
