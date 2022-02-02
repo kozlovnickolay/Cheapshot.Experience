@@ -10,14 +10,21 @@ namespace Cheapshot.Experience.Services {
         private readonly ExperienceRepository m_exp;
         private readonly StatisticsRepository m_stats;
         private readonly DailyCacheRepository m_cache;
+        private readonly CitiesRepository m_cities;
 
-        public TopService(ExperienceRepository exp, StatisticsRepository stats, DailyCacheRepository cache) {
+
+
+        public TopService(ExperienceRepository exp, StatisticsRepository stats, DailyCacheRepository cache, CitiesRepository cities) {
             m_exp = exp;
             m_stats = stats;
             m_cache = cache;
+            m_cities = cities;
         }
 
-        public Top[] GetTopPlayersByCityId(Guid cityId) {
+        public Top[] GetTopPlayers(Guid cityId) {
+
+            if (cityId != Guid.Empty && m_cities.Get(x => x.Id == cityId).FirstOrDefault() == null)
+                cityId = Guid.Empty;
 
             var maxDate = m_stats.GetMaxDate();
             var topCache = m_cache.GetTopCache(maxDate, maxDate, cityId);
@@ -114,31 +121,53 @@ namespace Cheapshot.Experience.Services {
         }
 
 
-        public Top[] GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate) {
+        public Top[] GetRangeTop(Guid cityId, DateTime startDate, DateTime endDate) {
+            if (cityId != Guid.Empty && m_cities.Get(x => x.Id == cityId).FirstOrDefault() == null)
+                cityId = Guid.Empty;
 
-            var topCache = m_cache.GetTopCache(startDate, endDate, cityId);
+            var minDate = GetMaxMinDate("min");
+            var maxDate = GetMaxMinDate("max");
 
-            if (topCache != null) {
-                return topCache;
-            } else {
-                IQueryable<ExperienceEntity> endTop;
-                IQueryable<ExperienceEntity> startTop;
+            if (endDate < startDate)
+                return null;
 
+            if (startDate < minDate || startDate > maxDate)
+                return null;
 
-                if (cityId != Guid.Empty) {
-                    startTop = m_exp.GetTopExperience(startDate, cityId);
-                    endTop = m_exp.GetTopExperience(endDate, cityId);
-                } else {
-                    startTop = m_exp.GetTopExperience(startDate);
-                    endTop = m_exp.GetTopExperience(endDate);
+            if (endDate < minDate || endDate > maxDate)
+                return null;
+
+            var cacheRecord = m_cache.GetRecordCache(startDate, endDate, cityId);
+
+            if (cacheRecord != null) {
+                if (cacheRecord.Cache.Length == 0) {
+                    var range = ReadRangeTop(cityId, startDate, endDate);
+                    cacheRecord.Cache = range;
+                    m_cache.Update(cacheRecord);
+                    m_cache.SaveChanges();
                 }
-
-                var range = GetDifferenceFromTops(endTop, startTop);
+                return cacheRecord.Cache;
+            } else {
+                var range = ReadRangeTop(cityId, startDate, endDate);
                 m_cache.Add(new DailyCacheEntity { From = startDate, To = endDate, Cache = range, CityId = cityId });
                 m_cache.SaveChanges();
                 return range;
             }
         }
+
+        Top[] ReadRangeTop(Guid cityId, DateTime startDate, DateTime endDate) {
+            IQueryable<ExperienceEntity> endTop;
+            IQueryable<ExperienceEntity> startTop;
+            if (cityId != Guid.Empty) {
+                startTop = m_exp.GetTopExperience(startDate, cityId);
+                endTop = m_exp.GetTopExperience(endDate, cityId);
+            } else {
+                startTop = m_exp.GetTopExperience(startDate);
+                endTop = m_exp.GetTopExperience(endDate);
+            }
+            return GetDifferenceFromTops(endTop, startTop);
+        }
+
 
         Top[] GetDifferenceFromTops(IQueryable<ExperienceEntity> end, IQueryable<ExperienceEntity> start) {
             var endResults = MapEntityToTop(end);

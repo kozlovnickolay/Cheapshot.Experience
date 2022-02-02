@@ -4,9 +4,9 @@ using System;
 
 namespace Cheapshot.Experience.Services {
     public interface ITopService {
-        Top[] GetTopPlayersByCityId(Guid cityId);
+        Top[] GetTopPlayers(Guid cityId);
 
-        Top[] GetRangeTopPlayersByCityId(Guid cityId, DateTime startDate, DateTime endDate);
+        Top[] GetRangeTop(Guid cityId, DateTime startDate, DateTime endDate);
 
         DateTime GetMaxMinDate(string type);
 

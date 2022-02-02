@@ -1,8 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Cheapshot<span
-          [class]="font.csemoji('🎖', 16)"></span>Experience</a>
+      <a class="navbar-brand" [routerLink]="['/']">Cheapshot<span [class]="font.csemoji('🎖', 16)"></span>Experience</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
@@ -23,6 +22,9 @@
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link" [routerLink]="['/tools']">Tools</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.patreon.com/itcig" target="_blank">Donate</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link" [routerLink]="['/about']">About</a>

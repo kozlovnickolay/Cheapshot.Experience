@@ -19,7 +19,7 @@ namespace Cheapshot.Experience.Controllers {
 
         [HttpGet]
         public object Get(Guid cityId) {
-            return m_service.GetTopPlayersByCityId(cityId);
+            return m_service.GetTopPlayers(cityId);
         }
     }
 }
