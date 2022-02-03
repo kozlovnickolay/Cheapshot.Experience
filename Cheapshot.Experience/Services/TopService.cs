@@ -71,9 +71,14 @@ namespace Cheapshot.Experience.Services {
             return m_exp.GetCitiesByUserId(endDate, userId);
         }
 
-        public Chart GetPeriodChart(Guid userId, DateTime min, DateTime max) {
+        public Chart GetPeriodChart(Guid userId, DateTime? min, DateTime? max) {
 
-            var query = m_exp.GetChart(min, max, userId)
+            if (!min.HasValue)
+                min = GetMaxMinDate("min");
+            if (!max.HasValue)
+                max = GetMaxMinDate("max");
+
+            var query = m_exp.GetChart(min.Value, max.Value, userId)
                 .Select(x => new {
                     Date = x.Date,
                     Level = x.Level,
@@ -81,21 +86,22 @@ namespace Cheapshot.Experience.Services {
                     Pic = x.User.UserPic,
                     Xp = x.Xp
                 })
-            .OrderBy(x => x.Date)
-            .Distinct()
-            .ToList();
+                .OrderBy(x => x.Date)
+                .Distinct()
+                .ToList();
 
-            var days = query.GroupBy(x => new { x.Name, x.Pic })
-            .Select(x => new {
-                x.Key.Pic,
-                x.Key.Name,
-                Values = x.Select(y => new {
-                    y.Date,
-                    y.Level,
-                    y.Xp
-                }).ToArray()
-            })
-            .First();
+            var days = query
+                .GroupBy(x => new { x.Name, x.Pic })
+                .Select(x => new {
+                    x.Key.Pic,
+                    x.Key.Name,
+                    Values = x.Select(y => new {
+                        y.Date,
+                        y.Level,
+                        y.Xp
+                    }).ToArray()
+                })
+                .First();
 
             var chart = new Chart {
                 Name = days.Name,

@@ -5,9 +5,9 @@ using System;
 namespace Cheapshot.Exprience.Data.Model {
     [Table("dailycache")]
     public class DailyCacheEntity : BaseEntity {
-        [Column("from")]
+        [Column("from", TypeName = "date")]
         public DateTime From { get; set; }
-        [Column("to")]
+        [Column("to", TypeName = "date")]
         public DateTime To { get; set; }
         [NotMapped]
         public Top[] Cache {

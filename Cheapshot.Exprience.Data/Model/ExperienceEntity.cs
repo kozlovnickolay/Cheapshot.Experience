@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Cheapshot.Exprience.Data.Model {
     [Table("experience")]
     public class ExperienceEntity : BaseEntity {
-        [Column("date")]
+        [Column("date", TypeName = "date")]
         public DateTime Date { get; set; }
         [Column("xp")]
         public long Xp { get; set; }
