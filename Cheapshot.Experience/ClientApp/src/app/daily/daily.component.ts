@@ -142,7 +142,7 @@ export class DailyComponent {
 				break;
 			}
 			case DailyType.Custom: {
-				this.startDate = this.minDate;
+				this.startDate =new Date(this.maxDate.getFullYear(), 0, 1);
 				this.endDate = this.maxDate;
 				this.title = `Custom report`;
 				break;

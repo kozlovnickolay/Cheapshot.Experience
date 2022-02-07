@@ -32,6 +32,7 @@ import { EnvelopCalculatorComponent } from './envelop-calculator/envelop-calcula
 import { BuildingCalculatorComponent } from './building-calculator/building-calculator.component';
 import { DurationPipe } from './custom-pipes/duration-pipe';
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { AddMonumentComponent } from './add-monument/add-monument.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
         ToolsComponent,
         EnvelopCalculatorComponent,
         BuildingCalculatorComponent,
-        DurationPipe],
+        DurationPipe,
+        AddMonumentComponent],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
@@ -68,6 +70,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
                     { path: 'about', component: AboutComponent },
                     { path: 'explore', component: ExploreComponent },
                     { path: 'pics', component: PicsComponent },
+                    { path: 'add', component: AddMonumentComponent },
                     { path: 'tools', component: ToolsComponent }]
             }, { path: 'map', component: MapComponent }
         ]),
