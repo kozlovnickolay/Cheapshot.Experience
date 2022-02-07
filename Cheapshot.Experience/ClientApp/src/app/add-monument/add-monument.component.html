@@ -13,8 +13,7 @@
 
             <mat-form-field class="field" appearance="standard">
                 <mat-label>Emoji of monument:</mat-label>
-                <select matNativeControl required [(ngModel)]="value.pic" name="value.difficulty"
-                    formControlName="difficulty">
+                <select matNativeControl placeholder="Select emoji" required [(ngModel)]="value.pic" formControlName="pic">
                     <option *ngFor="let pic of pics" [ngValue]="value.pic">{{pic}}</option>
                 </select>
             </mat-form-field>
@@ -25,7 +24,7 @@
                 <input matInput placeholder="City" [(ngModel)]="value.city" required formControlName="city">
             </mat-form-field>
 
-            <mat-form-field class="field" appearance="filstandardl">
+            <mat-form-field class="field" appearance="standard">
                 <mat-label>Country:</mat-label>
                 <input matInput placeholder="Country" [(ngModel)]="value.country" required formControlName="country">
             </mat-form-field>
@@ -41,7 +40,7 @@
         <div>
             <mat-form-field class="textarea-field" appearance="standard">
                 <mat-label>Some trivia so that we can come up with unique content for the place:</mat-label>
-                <textarea matInput [(ngModel)]="value.story" placeholder="Text here..."></textarea>
+                <textarea matInput [(ngModel)]="value.story" placeholder="Text here..." [ngModelOptions]="{standalone: true}"></textarea>
             </mat-form-field>
         </div>
 
