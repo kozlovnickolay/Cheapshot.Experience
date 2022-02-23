@@ -2,7 +2,7 @@
     <h1>Request for adding a monument</h1>
     <p>Please try not to suggest places that might be considered offensive. For example, in Russia it is not a good idea
         to touch on religion or the Second World War.</p>
-    <form *ngIf="!loading" class="example-form" [formGroup]="form">
+    <form class="example-form" [formGroup]="form">
         <div>
             <mat-form-field class="field" appearance="standard" hintLabel="Max 20 characters">
                 <mat-label>Name for monument:</mat-label>
@@ -11,12 +11,16 @@
                 <mat-hint align="end">{{input.value?.length || 0}}/20</mat-hint>
             </mat-form-field>
 
-            <mat-form-field class="field" appearance="standard">
+            <mat-form-field class="short-field" appearance="standard">
                 <mat-label>Emoji of monument:</mat-label>
-                <select matNativeControl placeholder="Select emoji" required [(ngModel)]="value.pic" formControlName="pic">
-                    <option *ngFor="let pic of pics" [ngValue]="value.pic">{{pic}}</option>
+                <select matNativeControl placeholder="Select emoji" required [(ngModel)]="value.pic"
+                    formControlName="pic">
+                    <option *ngFor="let pic of pics">{{pic}}</option>
                 </select>
             </mat-form-field>
+
+            <button mat-raised-button (click)="onFindEmoji()"><span class="material-icons">image_search</span> Find
+                emoji</button>
         </div>
         <div>
             <mat-form-field class="field" appearance="standard">
@@ -34,18 +38,20 @@
                 <mat-label>Location for monument:</mat-label>
                 <input matInput placeholder="Coordinates" [(ngModel)]="value.location" formControlName="location"
                     required>
+                <mat-error>Please enter a valid coordinates <strong>(example: 55.753687, 37.619900)</strong></mat-error>
                 <mat-hint align="end">Example: 55.753687, 37.619900</mat-hint>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field class="textarea-field" appearance="standard">
-                <mat-label>Some trivia so that we can come up with unique content for the place:</mat-label>
-                <textarea matInput [(ngModel)]="value.story" placeholder="Text here..." [ngModelOptions]="{standalone: true}"></textarea>
+                <mat-label>Special wishes and ideas:</mat-label>
+                <textarea matInput rows="4" [(ngModel)]="value.story" placeholder="Text here..."
+                    [ngModelOptions]="{standalone: true}"></textarea>
             </mat-form-field>
         </div>
 
 
-        <button type="submit" mat-raised-button (click)="onCreateClick()">Create monument</button>
+        <button *ngIf="!loading" type="submit" mat-raised-button (click)="onCreateClick()">Send request</button>
 
 
     </form>

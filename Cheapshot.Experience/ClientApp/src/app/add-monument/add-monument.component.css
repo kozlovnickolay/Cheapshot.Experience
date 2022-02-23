@@ -3,6 +3,11 @@
     margin: 10px;
 }
 
+.short-field {
+    width: 150px;
+    margin: 10px;
+}
+
 .textarea-field {
     width: 100%;
 }

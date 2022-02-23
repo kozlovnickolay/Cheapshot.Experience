@@ -33,6 +33,7 @@ import { BuildingCalculatorComponent } from './building-calculator/building-calc
 import { DurationPipe } from './custom-pipes/duration-pipe';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { AddMonumentComponent } from './add-monument/add-monument.component';
+import { EmojiSelectorComponent } from './emoji-selector/emoji-selector.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { AddMonumentComponent } from './add-monument/add-monument.component';
         EnvelopCalculatorComponent,
         BuildingCalculatorComponent,
         DurationPipe,
-        AddMonumentComponent],
+        AddMonumentComponent,
+        EmojiSelectorComponent],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
@@ -70,7 +72,7 @@ import { AddMonumentComponent } from './add-monument/add-monument.component';
                     { path: 'about', component: AboutComponent },
                     { path: 'explore', component: ExploreComponent },
                     { path: 'pics', component: PicsComponent },
-                    { path: 'add', component: AddMonumentComponent },
+                    { path: 'request-for-monument', component: AddMonumentComponent },
                     { path: 'tools', component: ToolsComponent }]
             }, { path: 'map', component: MapComponent }
         ]),
@@ -90,8 +92,6 @@ import { AddMonumentComponent } from './add-monument/add-monument.component';
         MatSnackBarModule,
         MatSlideToggleModule,
         CommonModule,
-        AgmCoreModule.forRoot({
-        }),
         ReactiveFormsModule,
         AgmOverlays,
         AgmJsMarkerClustererModule,
@@ -103,6 +103,6 @@ import { AddMonumentComponent } from './add-monument/add-monument.component';
 
     providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }, ThemeService, ThousandSuffixesPipe],
     bootstrap: [RootComponent],
-    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent, BuildingCalculatorComponent]
+    entryComponents: [MatSpinner, PlayerBottomSheet, LayersBottomSheetComponent, MarkerBottomSheetComponent, EnvelopCalculatorComponent, BuildingCalculatorComponent, EmojiSelectorComponent]
 })
 export class AppModule { }

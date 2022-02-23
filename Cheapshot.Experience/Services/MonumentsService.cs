@@ -1,4 +1,5 @@
 ﻿using Cheapshot.Experience.Model.Data;
+using Cheapshot.Exprience.Data.Model;
 using Cheapshot.Exprience.Data.Repository;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,27 @@ namespace Cheapshot.Experience.Services {
     public class MonumentsService : IMonumentService {
 
         private readonly MonumentsRepository m_monuments;
+        private readonly RequestsRepository m_requests;
 
-        public MonumentsService(MonumentsRepository monuments) {
+        public MonumentsService(MonumentsRepository monuments, RequestsRepository requests) {
             m_monuments = monuments;
+            m_requests = requests;
+        }
+
+        public Guid CreateRequest(Request request) {
+            var requestEntity = new RequestEntity {
+                City = request.City,
+                Country = request.Country,
+                Location = request.Location,
+                Name = request.Name,
+                RequestDate = DateTime.UtcNow,
+                Pic = request.Pic,
+                Story = request.Story
+            };
+
+            var id = m_requests.Add(requestEntity);
+            m_requests.SaveChanges();
+            return id;
         }
 
         public MonumentGroup[] GetActiveMonumentGroups() {

@@ -1,0 +1,4 @@
+<h3>Available pics:</h3>
+<br>
+<span *ngFor="let pic of this.pics; let i = index" [class]="font.csemoji(pic, 32)"
+    (click)="this.onSelectPic(pic)">{{pic}}</span>

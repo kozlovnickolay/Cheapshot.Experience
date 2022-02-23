@@ -26,5 +26,13 @@ namespace Cheapshot.Experience.Controllers {
             return m_service.GetActiveMonumentGroups();
         }
 
+        [HttpPost("add")]
+        public Guid Post(Request request)
+        {
+            var monumentId = m_service.CreateRequest(request);
+            Response.StatusCode = 201;
+            return monumentId;
+        }
+
     }
 }
