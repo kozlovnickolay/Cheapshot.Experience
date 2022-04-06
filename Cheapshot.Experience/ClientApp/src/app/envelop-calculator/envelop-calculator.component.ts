@@ -40,7 +40,7 @@ export class EnvelopCalculatorComponent implements OnInit {
 	autoTicks = false;
 	disabled = false;
 	invert = false;
-	max = 349;
+	max = 399;
 	min = 1;
 	showTicks = false;
 	step = 1;

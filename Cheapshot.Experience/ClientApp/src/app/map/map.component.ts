@@ -119,7 +119,7 @@ export class MapComponent {
     styleFunc(feature) {
         return ({
             clickable: false,
-            fillColor: feature.getProperty('color'),
+            fillColor: 'white',
             strokeWeight: 1
         });
     }

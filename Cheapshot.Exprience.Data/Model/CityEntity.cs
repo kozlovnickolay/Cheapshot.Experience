@@ -18,5 +18,7 @@ namespace Cheapshot.Exprience.Data.Model {
 
         [Column("flag")]
         public string Flag { get; set; }
+        [Column("active")]
+        public bool Active { get; set; }
     }
 }

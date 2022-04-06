@@ -23,7 +23,7 @@ namespace Cheapshot.Experience.Services {
         }
 
         public CountryGroup[] GetAllCountries() {
-            var countries = m_cities.GetAll().ToList().OrderBy(x => x.Country);
+            var countries = m_cities.GetActiveCities().ToList().OrderBy(x => x.Country);
 
             var countryGroup = countries
                 .GroupBy(x => new { x.Flag, x.Country })
