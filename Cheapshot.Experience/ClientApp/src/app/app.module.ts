@@ -92,6 +92,9 @@ import { EmojiSelectorComponent } from './emoji-selector/emoji-selector.componen
         MatSnackBarModule,
         MatSlideToggleModule,
         CommonModule,
+        AgmCoreModule.forRoot({
+            libraries: ['places']
+        }),
         ReactiveFormsModule,
         AgmOverlays,
         AgmJsMarkerClustererModule,

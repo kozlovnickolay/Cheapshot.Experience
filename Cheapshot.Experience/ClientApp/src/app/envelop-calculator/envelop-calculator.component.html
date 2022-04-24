@@ -2,10 +2,12 @@
 
     <h3>Envelopes calculator</h3>
 
-    <div class="info-label">Selected level: <span *ngIf="!editValue" class="level" (click)="onEditClick()">
-            {{ this.value }}</span>
+    <div class="info-label">Selected level: <span *ngIf="!editValue" class="level">{{ this.value }}</span>
         <input matInput *ngIf="editValue" type="number" placeholder="Level" [(ngModel)]="value"
             (change)="onChangeLevel($event.target)" [max]="max" [min]="min">
+        <button mat-icon-button [disabled]="editValue" (click)="onEditClick()">
+            <mat-icon style="font-size: 18px; line-height: 16px;">edit</mat-icon>
+        </button>
     </div>
 
     <mat-slider class="example-margin" [disabled]="disabled" [invert]="invert" [max]="max" [min]="min" [step]="step"

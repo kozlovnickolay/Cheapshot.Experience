@@ -1,6 +1,6 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, NgZone, ViewChild } from '@angular/core';
 import { CheapshotFont } from '../fonts/CheapshotFont';
-import { AgmMap, LatLngBoundsLiteral, MapTypeStyle, MouseEvent } from '@agm/core';
+import { AgmMap, LatLngBoundsLiteral, MapsAPILoader, MapTypeStyle, MouseEvent } from '@agm/core';
 import { Point } from '../model/Point';
 import darkStyle from './MapStyle';
 import { HttpClient } from '@angular/common/http';
@@ -41,6 +41,23 @@ export class MapComponent {
     lng = 7.809007;
     zoom: number = 5;
 
+    private geoCoder;
+
+    pickAudio = new Audio('/assets/sounds/ui_swipe.aac');
+    tap2Audio = new Audio('/assets/sounds/tap_2.aac');
+    tap3Audio = new Audio('/assets/sounds/tap_3.aac');
+
+
+
+    @ViewChild('search', null)
+    public searchElementRef: ElementRef;
+
+    point = {
+        active: false,
+        lat: 0,
+        lng: 0
+    };
+
     /** view port restrictions */
     mapRestriction = {
         latLngBounds: {
@@ -54,7 +71,14 @@ export class MapComponent {
 
     isCluster = false;
 
-    constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, public font: CheapshotFont, private _bottomSheet: MatBottomSheet) {
+    constructor(
+        http: HttpClient,
+        @Inject('BASE_URL') baseUrl: string,
+        public font: CheapshotFont,
+        private _bottomSheet: MatBottomSheet,
+        private mapsAPILoader: MapsAPILoader,
+        private ngZone: NgZone
+    ) {
         this.m_http = http;
         this.m_baseUrl = baseUrl;
     }
@@ -68,6 +92,50 @@ export class MapComponent {
         disableScroll();
         await this.loadCities();
         await this.loadMonuments();
+
+        const startAudio = new Audio('/assets/sounds/start.aac');
+        startAudio.play();
+
+        this.mapsAPILoader.load().then(() => {
+            this.geoCoder = new google.maps.Geocoder;
+
+            const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
+            autocomplete.addListener("place_changed", () => {
+
+                if (this.searchElementRef.nativeElement.value === "Squi" || this.searchElementRef.nativeElement.value === "squi") {
+                    this.lat = 55.77211588235539;
+                    this.lng = 37.67729242025703;
+                    this.zoom = 15;
+                    console.log("SQUUUUUUUUUUUUI");
+                    window.location.href = "csx://location?lat=55.77211588235539&lng=37.67729242025703";
+                }
+
+                this.ngZone.run(() => {
+                    //get the place result
+                    const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+                    //verify result
+                    if (place.geometry === undefined || place.geometry === null) {
+                        return;
+                    }
+
+                    this.pickAudio.play();
+
+                    this.point = {
+                        active: true,
+                        lat: place.geometry.location.lat(),
+                        lng: place.geometry.location.lng()
+                    };
+
+                    //set latitude, longitude and zoom
+                    this.lat = place.geometry.location.lat();
+                    this.lng = place.geometry.location.lng();
+                    this.zoom = 12;
+                });
+            });
+        });
+
+
     }
 
     ngOnDestroy() {
@@ -93,7 +161,7 @@ export class MapComponent {
                 city.points.forEach((p, pi) => {
                     const feature = {
                         type: "Feature",
-                        geometry: circleToPolygon([p.lon, p.lat], 15000, 32),
+                        geometry: circleToPolygon([p.lon, p.lat], 20000, 32),
                         properties: {
                             city: `${city.name}_${pi}`
                         }
@@ -106,13 +174,17 @@ export class MapComponent {
 
     onMapClick(evt: MouseEvent) {
         if (!this.isCluster) {
-            const cheapshotUrl = getCheapshotUrl(evt.coords.lat, evt.coords.lng);
-            window.location.href = cheapshotUrl;
+            this.pickAudio.play();
+            this.point = {
+                active: true,
+                ...evt.coords
+            };
         } else
             this.isCluster = !this.isCluster;
     }
 
     onClusterClick() {
+        this.tap2Audio.play();
         this.isCluster = true;
     }
 
@@ -125,6 +197,7 @@ export class MapComponent {
     }
 
     openLayersBottomSheet() {
+        this.tap2Audio.play();
         this._bottomSheet.open(LayersBottomSheetComponent, {
             data: this.layers
         });
@@ -147,7 +220,7 @@ export class MapComponent {
             });
 
             this.layers.push(newLayer);
-        })
+        });
     }
 
     layers: Layer[] = [];
@@ -171,8 +244,22 @@ export class MapComponent {
     }
 
     onMarkerClick(marker: MonumentMarker) {
+        this.tap2Audio.play();
         this._bottomSheet.open<MarkerBottomSheetComponent, MonumentMarker>(MarkerBottomSheetComponent, {
             data: marker
+        });
+    }
+
+    onPointClick() {
+        this.tap2Audio.play();
+        this._bottomSheet.open<MarkerBottomSheetComponent, MonumentMarker>(MarkerBottomSheetComponent, {
+            data: {
+                difficulty: null,
+                label: "Point",
+                ...this.point,
+                pic: "📍",
+                generation: null
+            }
         });
     }
 

@@ -15,6 +15,12 @@ export class BuildingCalculatorComponent implements OnInit {
 	ngOnInit() {
 	}
 
+	editFromValue = false;
+	editToValue = false;
+
+	onEditFromValueClick = () => this.editFromValue = true;
+	onEditToValueClick = () => this.editToValue = true;
+
 	getTotalTime = (lvl: number) => (lvl - 1) * lvl / 2;
 	getTotalXp = (lvl: number) => (8 + 3 * (lvl - 1)) * lvl / 2;
 

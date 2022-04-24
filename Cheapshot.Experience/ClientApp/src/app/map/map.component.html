@@ -1,12 +1,20 @@
 <app-nav-menu></app-nav-menu>
+<div class="search-bar">
+    <input type="text" #search class="form-control search-input" (keydown.enter)="$event.preventDefault()"
+        placeholder="Search..." autocorrect="off" autocapitalize="off" spellcheck="off">
+</div>
 <div class="layers">
     <a title="Слои" (click)="openLayersBottomSheet()">
         <img src="https://cheapshot.co/fonts/128/_1f50d-7f980c3f.png" alt="Слои">
     </a>
 </div>
 <agm-map class="map" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true" [styles]="styles"
-    (mapDblClick)="onMapClick($event)" gestureHandling="greedy" [restriction]="mapRestriction" [clickableIcons]="false"
-    [disableDoubleClickZoom]="true">
+    (mapClick)="onMapClick($event)" gestureHandling="greedy" [restriction]="mapRestriction" [clickableIcons]="false"
+    [disableDoubleClickZoom]="false">
+
+    <agm-overlay *ngIf="point.active" [latitude]="point.lat" [longitude]="point.lng" (markerClick)="onPointClick()">
+        <span [class]="font.csemoji('📍', 16) + ' marekerIcon'"></span>
+    </agm-overlay>
 
     <div *ngFor="let layer of layers; let i = index">
         <agm-data-layer *ngIf="layer.visible" [geoJson]="layer.geometry" [style]="styleFunc">

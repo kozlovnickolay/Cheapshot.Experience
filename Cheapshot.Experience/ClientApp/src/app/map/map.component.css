@@ -47,10 +47,27 @@ app-nav-menu {
 .marekerIcon {
   margin: auto;
   display: block;
+  cursor: pointer;
 }
 
 .infoEmoji{
   display: inline-block;
   vertical-align: middle;
   margin: 24px;
+}
+
+.search-bar{
+  position: absolute;
+  top: 9vh;
+  z-index: 1;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+}
+
+.search-input{
+  border: black;
+  background: #0000008f;
+  color: gray;
 }

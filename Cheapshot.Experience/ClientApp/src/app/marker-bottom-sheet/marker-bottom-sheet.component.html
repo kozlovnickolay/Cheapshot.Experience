@@ -2,7 +2,7 @@
     <div [class]="font.csemoji(marker.pic, 64) + ' info-emoji'"></div>
     <div class="info-text">
         <div class="info-label">{{marker.label}}</div>
-        <div class="info-label">Difficulty: {{marker.difficulty }}</div>
+        <div *ngIf="marker.difficulty" class="info-label">Difficulty: {{marker.difficulty }}</div>
     </div>
 </div>
 
